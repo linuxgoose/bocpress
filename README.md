@@ -1,6 +1,6 @@
 # BōcPress
 
-Naked blogging platform.
+From Quill to Cloud. A blogging platform where words endure and stories take flight.
 
 ## Community
 
