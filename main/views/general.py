@@ -105,6 +105,7 @@ def index(request):
             )
 
             # add Link header for license if applicable
+            obj, created = models.ReallySimpleLicensing.objects.get_or_create(user=request.blog_user)
             if request.blog_user.reallysimplelicensing.license and request.blog_user.reallysimplelicensing.show_http:
                 response["Link"] = f'<{license_url}>; rel="license"; type="application/rsl+xml"'
 
@@ -155,6 +156,7 @@ def post_list(request):
             )
         
             # add Link header for license if applicable
+            obj, created = models.ReallySimpleLicensing.objects.get_or_create(user=request.blog_user)
             if request.blog_user.reallysimplelicensing.license and request.blog_user.reallysimplelicensing.show_http:
                 response["Link"] = f'<{license_url}>; rel="license"; type="application/rsl+xml"'
 
