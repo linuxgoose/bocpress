@@ -1,10 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Editing {{ form.name.value }} image — {{ request.user.username }}{% endblock %}
+{% block title %}Editing {{ form.name.value }} asset — {{ request.user.username }}{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Editing image</h1>
+    <h1>Editing asset</h1>
 
     <form method="post">
         {{ form.as_p }}

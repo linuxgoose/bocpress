@@ -2,36 +2,36 @@
 
 {% load static %}
 
-{% block title %}Images Guide{% endblock %}
+{% block title %}Assets Guide{% endblock %}
 
 {% block content %}
 <main>
 
-    <h1>Images Guide</h1>
+    <h1>Assets Guide</h1>
     <p>
-        Even though we are very text focused, we do support image uploading and hosting.
+        Even though we are very text focused, we do support asset uploading and hosting.
         The limits are:
     </p>
     <ul>
-        <li>Max file size is 1MB</li>
+        <li>Max file size is 5MB</li>
         <li>Total hosting up to 100MB</li>
-        <li>Total image count up to 1000</li>
+        <li>Total asset count up to 1000</li>
         <li>Bandwidth 100GB per year</li>
     </ul>
 
     <h2>Upload</h2>
     <p>
-        There are two ways to upload an image. Either via the
-        <a href="{% url 'image_list' %}">image dashboard</a>, or via any post or page editing page.
+        There are two ways to upload an asset. Either via the
+        <a href="{% url 'image_list' %}">assets dashboard</a>, or via any post or page editing page.
     </p>
-    <p><b>Image dashboard</b>: To upload, use the file selector at the <a href="{% url 'image_list' %}">top</a>.</p>
+    <p><b>Assets dashboard</b>: To upload, use the file selector at the <a href="{% url 'image_list' %}">top</a>.</p>
     <p>
         <b>Post/page edit</b>: To upload, just drag and drop onto the text area of the new post or page.
     </p>
 
-    <h2>Show images</h2>
+    <h2>Show assets</h2>
     <p>
-        To show the uploaded images on a BōcPress blog post or page, one can write the following:
+        To show the uploaded assets on a BōcPress blog post or page, one can write the following:
         <br><code>![image description here](https://mataroa.blog/images/896f9b41.png)</code>
     </p>
     <p>

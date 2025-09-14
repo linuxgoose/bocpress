@@ -52,7 +52,7 @@ class UploadImagesForm(forms.Form):
     file = MultipleFileField(
         validators=[
             dj_validators.FileExtensionValidator(
-                ["jpeg", "jpg", "png", "svg", "gif", "webp", "tiff", "tif", "bmp"]
+                ["jpeg", "jpg", "png", "svg", "gif", "webp", "tiff", "tif", "bmp", "txt", "md", "rtf", "pdf", "epub", "doc", "docx", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "csv", "tsv", "ics", "vcf", "log", "json", "xml", "yml", "yaml", "ini", "toml", "cfg", "conf", "mdown", "markdown"]
             )
         ],
     )

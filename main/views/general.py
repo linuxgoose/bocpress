@@ -811,8 +811,8 @@ class ImageList(LoginRequiredMixin, FormView):
                 data = f.read()
 
                 # check for file limit
-                if len(data) > 1.1 * 1000 * 1000:
-                    form.add_error("file", "File too big. Limit is 1MB.")
+                if len(data) > 5 * 1024 * 1024:
+                    form.add_error("file", "File too big. Limit is 5MB.")
                     return self.form_invalid(form)
 
                 # quota limit 1GB total per user
@@ -868,7 +868,7 @@ class ImageDetail(LoginRequiredMixin, DetailView):
         # find posts that use this image
         context["used_by_posts"] = []
         for post in models.Post.objects.filter(owner=self.request.user):
-            if "/images/" + self.object.filename in post.body:
+            if "/assets/" + self.object.filename in post.body:
                 context["used_by_posts"].append(post)
 
         return context

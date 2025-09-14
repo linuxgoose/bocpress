@@ -15,7 +15,7 @@ urlpatterns = [
     path("about/transparency/", general.transparency, name="transparency"),
     path("about/comparisons/", general.comparisons, name="comparisons"),
     path("guides/markdown/", general.guides_markdown, name="guides_markdown"),
-    path("guides/images/", general.guides_images, name="guides_images"),
+    path("guides/assets/", general.guides_images, name="guides_images"),
     path(
         "guides/custom-domain/", general.guides_customdomain, name="guides_customdomain"
     ),
@@ -46,7 +46,7 @@ urlpatterns += [
     path("moderation/index/", moderation.index, name="moderation_index"),
     path("moderation/cards/", moderation.user_cards, name="moderation_user_cards"),
     path("moderation/users/", moderation.user_list, name="moderation_user_list"),
-    path("moderation/images/", moderation.images_leaderboard, name="moderation_images"),
+    path("moderation/assets/", moderation.images_leaderboard, name="moderation_images"),
     path("moderation/posts/", moderation.posts_leaderboard, name="moderation_posts"),
     path("moderation/stats/", moderation.stats, name="moderation_stats"),
     path(
@@ -231,20 +231,20 @@ urlpatterns += [
     ),
 ]
 
-# images
+# assets (images and other files)
 urlpatterns += [
-    path("images/<slug:slug>.<slug:extension>", general.image_raw, name="image_raw"),
+    path("assets/<slug:slug>.<slug:extension>", general.image_raw, name="image_raw"),
     re_path(
-        r"^images/(?P<options>\?[\w\=]+)?$",  # e.g. images/ or images/?raw=true
+        r"^assets/(?P<options>\?[\w\=]+)?$",  # e.g. assets/ or assets/?raw=true
         general.ImageList.as_view(),
         name="image_list",
     ),
-    path("images/<slug:slug>/", general.ImageDetail.as_view(), name="image_detail"),
+    path("assets/<slug:slug>/", general.ImageDetail.as_view(), name="image_detail"),
     path(
-        "images/<slug:slug>/edit/", general.ImageUpdate.as_view(), name="image_update"
+        "assets/<slug:slug>/edit/", general.ImageUpdate.as_view(), name="image_update"
     ),
     path(
-        "images/<slug:slug>/delete/",
+        "assets/<slug:slug>/delete/",
         general.ImageDelete.as_view(),
         name="image_delete",
     ),

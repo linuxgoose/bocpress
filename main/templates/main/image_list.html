@@ -1,10 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Images — {{ request.user.username }}{% endblock %}
+{% block title %}Assets — {{ request.user.username }}{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Images</h1>
+    <h1>Assets</h1>
     <form method="post" enctype="multipart/form-data">
         {{ form.non_field_errors }}
         <p>
@@ -22,7 +22,7 @@
 
 <section>
     <p>
-        <strong>Using:</strong> {{ images|length }} out of 1000 images.
+        <strong>Using:</strong> {{ images|length }} out of 1000 assets.
         {{ total_quota }}MB out of 1000MB.
     </p>
 </section>
