@@ -97,6 +97,7 @@ urlpatterns += [
     path("post/<slug:slug>/", general.post_detail_redir, name="post_detail_redir_b"),
     path("blog/<slug:slug>/edit/", general.PostUpdate.as_view(), name="post_update"),
     path("blog/<slug:slug>/delete/", general.PostDelete.as_view(), name="post_delete"),
+    path("dashboard/homepage/", general.HomepageUpdate.as_view(), name="homepage_update"),
 ]
 
 # blog extras

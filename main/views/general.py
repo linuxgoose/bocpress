@@ -235,6 +235,21 @@ class UserCreateStepTwo(CreateView):
             return redirect("index")
         return super().dispatch(request, *args, **kwargs)
 
+class HomepageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = models.User
+    fields = [
+        "blog_index_content",
+        "show_posts_on_homepage",
+    ]
+    template_name = "main/homepage_update.html"
+    success_message = "homepage updated"
+    success_url = reverse_lazy("dashboard")
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.User
@@ -244,7 +259,6 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "blog_title",
         "posts_page_title",
         "blog_byline",
-        "blog_index_content",
         "subscribe_note",
         "footer_note",
         "theme_zialucia",
