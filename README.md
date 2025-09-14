@@ -21,7 +21,7 @@ Send an email patch to
 See how to contribute using email patches here:
 [git-send-email.io](https://git-send-email.io/).
 
-Read our docs at [docs.mataroa.blog](https://docs.mataroa.blog/)
+Read our docs at [docs.bocpress.co.uk](https://docs.bocpress.co.uk/)
 
 ## Development
 
