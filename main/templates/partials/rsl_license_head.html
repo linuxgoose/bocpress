@@ -1,0 +1,7 @@
+{% if blog_user.reallysimplelicensing.license and blog_user.reallysimplelicensing.show_webpage %}
+<link rel="license" type="application/rsl+xml" href="{{ license_url }}">
+
+<script type="application/rsl+xml">
+    {{ blog_user.reallysimplelicensing.license|safe }}
+</script>
+{% endif %}

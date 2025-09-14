@@ -1,0 +1,24 @@
+# python
+*.pyc
+
+# environment
+.envrc
+.venv/
+postgres-data/
+
+# generated static
+/static/
+
+# testing
+.coverage
+htmlcov/
+
+# docker
+docker-postgres-data/
+docker-compose.override.yml
+
+# mdbook docs
+/docs/book/
+.env
+db.sqlite3
+debug.log

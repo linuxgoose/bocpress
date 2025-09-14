@@ -1,0 +1,75 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Dashboard — {{ request.user.username }}{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Dashboard</h1>
+    <p class="dashboard-cta">
+        <a href="{% url 'post_create' %}"><b>New post »</b></a>
+    </p>
+
+    <strong>Content</strong>
+    <div class="dashboard-list">
+        {% if request.user.comments_on %}
+        <a href="{% url 'comment_pending' %}">
+            Comments pending
+            ({{ comments_pending_count }})
+        </a>
+        <br>
+        {% endif %}
+
+        <a href="{% url 'image_list' %}">Images</a>
+        <br><a href="{% url 'post_list' %}">Posts</a>
+        <br><a href="{% url 'page_list' %}">Pages</a>
+
+        {% if request.user.notifications_on %}
+        <br><a href="{% url 'notificationrecord_list' %}">Newsletter</a>
+        {% endif %}
+
+        <br><a href="{% url 'analytic_list' %}">Analytics</a>
+        {% if request.user.post_backups_on %}
+        <br><a href="{% url 'snapshot_list' %}">Post Backups</a>
+        {% endif %}
+    </div>
+
+    <strong>Manage</strong>
+    <div class="dashboard-list">
+        <a href="{% url 'webring' %}">Webring</a>
+        <br><a href="{% url 'api_docs' %}">API</a>
+
+        {% if billing_enabled %}
+        <br><a href="{% url 'billing_index' %}">Billing</a>
+        {% endif %}
+
+        <br><a href="{% url 'blog_import' %}">Import posts</a>
+        <br><a href="{% url 'export_index' %}">Export blog</a>
+    </div>
+
+    <strong>Account</strong>
+    <div class="dashboard-list">
+        <a href="{% url 'user_update' %}">Blog settings</a>
+        <br><a href="{% url 'password_change' %}">Change password</a>
+        <br><a href="{% url 'methodology' %}">Platform Methodology</a>
+        <br><a href="mailto:admin@bocpress.co.uk">Help and support</a>
+        <br>
+        <form method="post" action="{% url 'logout' %}" class="form-inline">
+            {% csrf_token %}
+            <input type="submit" value="Log out">
+        </form>
+    </div>
+
+    <strong>Licensing</strong>
+    <div class="dashboard-list">
+        <a href="{% url 'rsl_update' %}">Really Simple Licensing</a>
+    </div>
+
+    {% if request.user.is_superuser %}
+    <strong>Administration</strong>
+    <div class="dashboard-list">
+        <a href="{% url 'admin:index' %}">Django Admin</a>
+        <br><a href="{% url 'moderation_index' %}">Moderation</a>
+    </div>
+    {% endif %}
+</main>
+{% endblock content %}

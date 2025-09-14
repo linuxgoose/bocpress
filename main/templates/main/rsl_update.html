@@ -1,0 +1,29 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Really Simple Licensing settings{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Really Simple Licensing settings</h1>
+
+    <p> <a href="https://rslstandard.org/">Really Simple Licensing</a> (RSL) builds on the foundational ideas of the RSS standard, which allowed publishers to syndicate content in a machine-readable format for third-party clients and crawlers, often in exchange for increased traffic. 
+    </p> 
+    <p>
+        RSL expands these concepts by incorporating explicit licensing terms, letting publishers specify machine-readable conditions for content use and compensation. The <a href="https://rslstandard.org/about">RSL Technical Steering Committee</a> guides the development of the standard in partnership with publishers, technology companies, industry groups, and other stakeholders. 
+    </p>
+
+    <p>
+        BōcPress supports the RSL standard by allowing you to add your license text (XML) and choose where to display it.
+    </p>
+
+    <p>
+        For more information, see <a href="https://rslstandard.org/guide/getting-started">Getting started with RSL</a> and pick your license at <a href="https://rslstandard.org/guide/getting-started#step-1-create-a-license-file">RSL Licenses</a>.
+    </p>
+
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+</main>
+{% endblock content %}

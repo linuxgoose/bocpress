@@ -1,0 +1,12 @@
+baseURL = "http://example.com/"
+languageCode = "en-us"
+title = "Example blog title"
+theme = "mataroa"
+
+[params]
+    description = "Example blog description"
+
+[outputFormats]
+  [outputFormats.RSS]
+    mediatype = "application/rss"
+    baseName = "rss"

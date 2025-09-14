@@ -1,0 +1,157 @@
+/* general */
+:root {
+    --dark-grey-color: #a8a8a8;
+    --light-grey-color: #eff1f5;
+    --green-color: #26bd60;
+    --red-color: #ff0000;
+}
+
+html,
+body {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    max-width: 500px;
+}
+
+img {
+    width: 100%;
+}
+
+h1 {
+    font-weight: 500;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--light-grey-color);
+}
+
+h2,
+h3 {
+    font-weight: 500;
+}
+
+main {
+    max-width: 500px;
+    margin-bottom: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media (max-width: 500px) {
+    main {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+aside {
+    max-width: 500px;
+    padding: 2px 6px;
+    margin-top: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+@media (max-width: 500px) {
+    aside {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+}
+
+nav {
+    max-width: 500px;
+    margin-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media (max-width: 500px) {
+    nav {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+blockquote {
+    max-width: 500px;
+}
+
+/* index */
+.byline {
+    color: var(--dark-grey-color);
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.byline::before {
+    content: "» ";
+}
+
+.posts {
+    list-style: none;
+    padding-left: 0;
+}
+
+.posts li {
+    font-size: 16px;
+    margin-bottom: 24px;
+}
+
+.posts small {
+    white-space: nowrap;
+    color: var(--dark-grey-color);
+}
+
+.posts time {
+    white-space: nowrap;
+}
+
+/* post detail */
+.posts-item-title {
+    margin-bottom: 8px;
+}
+
+.posts-item-byline {
+    color: var(--dark-grey-color);
+    margin-bottom: 8px;
+}
+
+.posts-item-brand {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: var(--dark-grey-color);
+}
+
+.posts-item-brand:hover {
+    text-decoration: none;
+}
+
+.posts-item-brand::before {
+    content: "» ";
+}
+
+/* footer */
+footer {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 64px;
+    margin-bottom: 16px;
+    max-width: 500px;
+}
+@media (max-width: 500px) {
+    footer {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}

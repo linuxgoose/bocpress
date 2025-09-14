@@ -1,0 +1,85 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Posts | {{ blog_user.blog_title|default:blog_user.username }}{% endblock %}
+
+{% block meta_description %}{{ blog_user.blog_byline|default:"" }}{% endblock %}
+
+{% block head_extra %}
+<link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'rss_feed' %}">
+{% if blog_user.blog_byline %}
+<meta name="description" content="{{ blog_user.blog_byline_as_text }}">
+{% endif %}
+{% endblock head_extra %}
+
+{% block head_rsl_license %}
+{% include 'partials/rsl_license_head.html' %}
+{% endblock head_rsl_license %}
+
+{% block content %}
+<nav>
+    <a href="{% url 'index' %}">Home</a>
+    {% if blog_user.show_posts_in_nav or pages %}
+        |
+        {% if blog_user.show_posts_in_nav %}
+            <a href="{% url 'post_list' %}">{% if blog_user.posts_page_title %}{{ blog_user.posts_page_title }}{% else %}Posts{% endif %}</a>
+            {% if pages %}
+                |
+            {% endif %}
+        {% endif %}
+
+        {% for page in pages %}
+            <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
+            {% if not forloop.last %}
+                |
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</nav>
+
+<main class="blog" itemscope itemtype="http://schema.org/Blog">
+    {% if blog_user.blog_title %}
+    <h1 itemprop="name">{{ blog_user.blog_title }}</h1>
+    {% endif %}
+
+    <h2 itemprop="name">{% if blog_user.posts_page_title %}{{ blog_user.posts_page_title }}{% else %}Posts{% endif %}</h2>
+
+    {% if request.user.is_authenticated and request.subdomain == request.user.username and drafts %}
+    <div class="drafts">
+        <strong>
+            Drafts
+        </strong>
+        <ul>
+            {% for d in drafts %}
+            <li>
+                <a href="{% url 'post_detail' d.slug %}">{{ d.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <ul class="posts">
+        {% for p in posts %}
+        {% if p.published_at %}
+        <li>
+            <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
+            <small>
+                —
+                <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">
+                    {{ p.published_at|date:'F j, Y' }}
+                </time>
+                {% if not p.is_published %}
+                — SCHEDULED
+                {% endif %}
+            </small>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</main>
+
+{% include 'partials/webring.html' %}
+
+{% include 'partials/footer_blog.html' %}
+
+{% endblock content %}

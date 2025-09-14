@@ -1,0 +1,36 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Posts — {{ request.user.username }}{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Posts</h1>
+    <p>
+        <a href="{% url 'post_create' %}">Create a new post »</a>
+    </p>
+    {% if post_list %}
+    <p>
+        List of posts:
+    </p>
+    <ul>
+        {% for post in post_list %}
+        <li>
+            <a href="{% url 'post_detail' post.slug %}">
+                {{ post.title }}
+            </a>
+            <small>
+                {% if post.is_published %}
+                <time datetime="{{ post.published_at|date:'Y-m-d' }}" itemprop="datePublished">
+                    — {{ post.published_at|date:'F j, Y' }}
+                </time>
+                {% endif %}
+                {% if not post.is_published %}
+                — DRAFT/SCHEDULED
+                {% endif %}
+            </small>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</main>
+{% endblock content %}

@@ -1,0 +1,241 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}BōcPress — From Quill to Cloud{% endblock %}
+
+{% block content %}
+<main>
+    <h1>BōcPress</h1>
+    <p>
+        From Quill to Cloud. A blogging platform where words endure and stories take flight.
+    </p>
+    <ul class="lead">
+        <li><b>A matter of mere moments to join</b> → <a href="{% url 'user_create' %}">Sign up</a></li>
+        <ul>
+            <li>Hosted at &lt;username&gt;.bocpress.co.uk or yourdomain.com</li>
+            <li>Write your posts in markdown</li>
+        </ul>
+        <li>
+            View <a href="https://jjrobinson.bocpress.co.uk/blog/the-importance-of-user-journey-testing/">example post</a>
+            / <a href="https://https://jjrobinson.bocpress.co.uk/">example blog</a>
+        </li>
+    </ul>
+
+    <h2>Features</h2>
+    <ul>
+        <li>
+            <a href="{% url 'methodology' %}">Respects your privacy, keeping all trackers, advertisements, and hidden scripts at bay</a>
+        </li>
+        <ul>
+            <li>No cookies for analytics or tracking</li>
+            <li>No email required for signup</li>
+        </ul>
+        <li>Freedom to move your blog—no platform lock-in</li>
+        <ul>
+            <li><a href="{% url 'export_index' %}">Export your blog at anytime</a></li>
+            <li><a href="https://hey.mataroa.blog/blog/monthly-auto-exports-via-email/">Monthly automatic exports via
+                    email</a> (premium feature)</li>
+            <li><a href="https://hey.mataroa.blog/blog/redirect-to-new-domain/">Redirect to new domain</a></li>
+        </ul>
+        <li>
+            <a href="{% url 'guides_customdomain' %}">Use your own custom domain</a> (premium feature)
+        </li>
+
+        <li>
+            <a href="{% url 'guides_images' %}">Image hosting is included</a>
+        </li>
+        <li>Feed Subscriptions available for readers</li>
+        <ul>
+            <li>via RSS & Atom</li>
+            <li>via Email (newsletter)</li>
+        </ul>
+        <li>
+            <a href="https://rslstandard.org/">Really Simple Licensing</a> support for your content
+        </li>
+        <li>Additional conveniences::</li>
+        <ul>
+            <li>Analytics (backend based)</li>
+            <li><a href="{% url 'api_docs' %}">API endpoints for advanced control</a></li>
+            <li>Import text/markdown files</li>
+            <li>Export content as an ePub book</li>
+        </ul>
+        <li>100% Affero GPL <a href="https://github.com/linuxgoose/mataroa">free software</a></li>
+        <li><a href="{% url 'transparency' %}">Business Transparency and Oppenness</a></li>
+    </ul>
+
+    <h2>Pricing</h2>
+    <ul>
+        <li>Free — most features</li>
+        <ul>
+            <li>No custom domain</li>
+            <li>No auto-exports via email</li>
+        </ul>
+        <li>Premium — all features</li>
+        <ul>
+            <li>£12/year</li>
+            <li>5% of revenue funds <a href="#">CO₂ removal</a></li>
+        </ul>
+    </ul>
+
+    <div class="cta">
+        <a class="cta-link" href="{% url 'user_create' %}">Start your blog</a>
+        — <a href="https://jjrobinson.bocpress.co.uk">view example blog</a>
+    </div>
+
+    <h2>What does "BōcPress" mean?</h2>
+    <p>BōcPress was chosen because it blends heritage, literature, and modern publishing in a single, memorable name.
+    </p>
+    <p>Let's break it down:</p>
+    <ul>
+        <li>“Bōc” comes from the Old English word for book, evoking centuries of literary tradition and the enduring
+            power of the written word.</li>
+        <li>“Press” signals publishing and dissemination, connecting the platform to both historic printing presses and
+            today’s digital tools.</li>
+    </ul>
+
+    <p>Together, BōcPress represents a modern platform for writers while honoring the timeless craft of storytelling.
+    </p>
+
+    <p>This name reflects our mission: to provide a digital space where stories, ideas, and voices endure, combining
+        elegance, literary heritage, and modern accessibility.</p>
+
+    <h2>FAQ</h2>
+
+    <details>
+        <summary>Do you support custom CSS?</summary>
+        <div>
+            <p>
+                Not at the moment. The philosophy of BōcPress is to be as minimal as possible without enabling
+                too many decisions about styling. We understand that this is not what some prefer and are open to ideas.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Can I self-host BōcPress?</summary>
+        <div>
+            <p>
+                Absolutely. The project is
+                <a href="https://github.com/linuxgoose/mataroa">open source</a>
+                and you can find deployment documentation
+                <a href="https://docs.mataroa.blog/deployment.html">in the docs</a>.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Why should I use BōcPress instead of Substack/WordPress/etc?</summary>
+        <div>
+            <p>
+                BōcPress embraces a minimalist ethos: swift, unadorned, and focused on the heart of your words. 
+                It values simplicity over bells and whistles, while offering strong data interoperability. 
+                Your content is yours to keep, and exporting it is effortless.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Will you add themes?</summary>
+        <div>
+            <p>
+                At present, there are no plans to add custom themes or templates. It's
+                part of our philosophy to enable one to just write and publish without
+                having to make too many decisions about styling. We understand that this is not what some prefer and are open to ideas.
+            </p>
+            <p>
+                Nonetheless, there are discussions around adding <i>some</i> minor styling decisions for authors, 
+                but these are unplanned at the moment. Feel free to get in touch with any ideas you may have around this topic.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>What about tags or categories?</summary>
+        <div>
+            <p>
+                These are not currently supported, however there are plans to add them. We want to keep the platform simple, 
+                but understand that tags or categories can help with organization and discovery. If implemented, 
+                they will be designed to remain minimal and unobtrusive.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>What about pagination?</summary>
+        <div>
+            <p>
+                Pagination can be difficult as it breaks the browser search across all post titles.
+                Additionally, because of how fast and simple BōcPress is, speed is not an issue
+                even with thousands of posts. This is a feature we may consider in the future, but
+                it is not currently planned.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Why doesn't strikethrough markdown notation work?</summary>
+        <div>
+            <p>
+                The markdown library we use
+                (<a href="https://github.com/Python-Markdown/markdown">Python-Markdown</a>)
+                supports
+                <a href="http://daringfireball.net/projects/markdown/syntax">
+                    John Gruber’s markdown spec</a>,
+                which does not define strikethrough text. Discussions have been had on migrating to another
+                markdown library at some point in the future, though, this is not
+                yet planned.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Would you consider a rich text editor option?</summary>
+        <div>
+            <p>
+                At present, a rich text editor is too much for BōcPress. Something like Trix does look like it would be great, 
+                however the added complexity is too high with 200K of JavaScript code. Saving HTML in the database instead of
+                simple text is also less than ideal.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Would you add support for LaTeX-style math expressions?</summary>
+        <div>
+            <p>
+                This was recently introduced in V1.3.1. Please see the <a href="https://github.com/linuxgoose/mataroa/pull/20">pull request</a> for more information or give it a try yourself.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>What about supporting Mermaid flowcharts?</summary>
+        <div>
+            <p>
+                We would not add
+                <a href="https://github.com/mermaid-js/mermaid">mermaid-js</a>
+                as it is
+                <a href="https://github.com/mermaid-js/mermaid/blob/develop/dist/mermaid.min.js">
+                    2.7MB minified
+                </a>
+                JavaScript which is far too heavy for BōcPress' mission. However, we would be interested
+                in implementing something similar if it was rendered on the backend.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Do you support ActivityPub Federation?</summary>
+        <div>
+            <p>
+                We do not, however, we'd like to. This is unplanned work that might
+                happen at some point in the future.
+            </p>
+        </div>
+    </details>
+
+    <p>Forked from <a href="https://mataroa.blog/">mataroa</a></p>
+</main>
+
+{% include 'partials/footer.html' %}
+
+{% endblock content %}
