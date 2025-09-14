@@ -1,4 +1,4 @@
-# mataroa
+# BōcPress
 
 Naked blogging platform.
 
@@ -12,14 +12,9 @@ anything that’s on their mind!
 Archives at
 [lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
 
-### Tools
-
-* [mataroa-cli](https://github.com/mataroablog/mataroa-cli)
-* [Mataroa Telegram Bot](https://github.com/Unknowing9428/Mataroa-Telegram-Bot)
-
 ## Contributing
 
-Open a PR on [GitHub](https://github.com/mataroablog/mataroa).
+Open a PR on [GitHub](https://github.com/linuxgoose/bocpress).
 
 Send an email patch to
 [~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).
@@ -43,32 +38,32 @@ divided into two categories, those under `python manage.py` and those under
 
 ### Set up subdomains
 
-Because mataroa works primarily with subdomain, one cannot access the basic web app
+Because BōcPress works primarily with subdomain, one cannot access the basic web app
 using the standard `http://127.0.0.1:8000` or `http://localhost:8000` URLs. What we do
 for local development is adding a few custom entries on our `/etc/hosts` system file.
 
 Important note: there needs to be an entry of each user account created in the local
 development environment, so that the web server can respond to it.
 
-The first line is the main needed: `mataroalocal.blog`. The rest are included as
+The first line is the main needed: bocpress.co.uk`. The rest are included as
 examples of other users one can create in their local environment. The
 easiest way to create them is to go through the sign up page
-(`http://mataroalocal.blog:8000/accounts/create/` using default values).
+(`http://dev-bocpress.co.uk:8000/accounts/create/` using default values).
 
 ```
 # /etc/hosts
 
-127.0.0.1 mataroalocal.blog
+127.0.0.1 dev-bocpress.co.uk
 
-127.0.0.1 paul.mataroalocal.blog
-127.0.0.1 random.mataroalocal.blog
-127.0.0.1 anyusername.mataroalocal.blog
+127.0.0.1 paul.dev-bocpress.co.uk
+127.0.0.1 random.dev-bocpress.co.uk
+127.0.0.1 anyusername.dev-bocpress.co.uk
 ```
 
-This will enable us to access mataroa locally (once we start the web server) at
-[http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
+This will enable us to access BōcPress locally (once we start the web server) at
+[http://dev-bocpress.co.uk:8000/](http://dev-bocpress.co.uk:8000/)
 and if we make a user account with username `paul`, then we will be able to access it at
-[http://paul.mataroalocal.blog:8000/](http://paul.mataroalocal.blog:8000/)
+[http://paul.dev-bocpress.co.uk:8000/](http://paul.dev-bocpress.co.uk:8000/)
 
 ### Docker
 
@@ -84,8 +79,8 @@ docker compose up
 ```
 
 If you have also configured hosts as described above in the "Set up subdomains"
-section, mataroa should now be locally accessible at
-[http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
+section, BōcPress should now be locally accessible at
+[http://dev-bocpress.co.uk:8000/](http://dev-bocpress.co.uk:8000/)
 
 Note: The database data are saved in the git-ignored `docker-postgres-data` docker
 volume, located in the root of the project.
@@ -116,7 +111,7 @@ cp .envrc.example .envrc
 
 export DEBUG=1
 export SECRET_KEY=some-secret-key
-export DATABASE_URL=postgres://mataroa:db-password@db:5432/mataroa
+export DATABASE_URL=postgres://bocpress:db-password@db:5432/bocpress
 export EMAIL_HOST_USER=smtp-user
 export EMAIL_HOST_PASSWORD=smtp-password
 ```
@@ -182,8 +177,8 @@ uv python manage.py runserver
 ```
 
 If you have also configured hosts as described above in the "Set up subdomains"
-section, mataroa should now be locally accessible at
-[http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
+section, BōcPress should now be locally accessible at
+[http://dev-bocpress.co.uk:8000/](http://dev-bocpress.co.uk:8000/)
 
 ## Testing
 
@@ -236,14 +231,14 @@ uv sync --all-groups
 ## Deployment
 
 See the [Deployment](./docs/deployment.md) document for an overview on steps
-required to deploy a mataroa instance.
+required to deploy a BōcPress instance.
 
 ### Useful Commands
 
 To reload the gunicorn process:
 
 ```sh
-sudo systemctl reload mataroa
+sudo systemctl reload bocpress
 ```
 
 To reload Caddy:
@@ -255,7 +250,7 @@ systemctl restart caddy  # root only
 gunicorn logs:
 
 ```sh
-journalctl -fb -u mataroa
+journalctl -fb -u bocpress
 ```
 
 Caddy logs:
@@ -268,7 +263,7 @@ Get an overview with systemd status:
 
 ```sh
 systemctl status caddy
-systemctl status mataroa
+systemctl status bocpress
 ```
 
 ## Backup
@@ -278,13 +273,13 @@ See [Database Backup](docs/database-backup.md) for details. In summary:
 To create a database dump:
 
 ```sh
-pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -w
+pg_dump -Fc --no-acl bocpress -h localhost -U bocpress -f /home/deploy/bocpress.dump -w
 ```
 
 To restore a database dump:
 
 ```sh
-pg_restore -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
+pg_restore -v -h localhost -cO --if-exists -d bocpress -U bocpress -W bocpress.dump
 ```
 
 ## Management
@@ -302,11 +297,11 @@ python manage.py processnotifications
 
 ## Billing
 
-One can deploy mataroa without setting up billing functionalities. This is
+One can deploy BōcPress without setting up billing functionalities. This is
 the default case. To handle payments and subscriptions this project uses
 [Stripe](https://stripe.com/). To enable Stripe and payments, one needs to have
 a Stripe account with a single
-[Product](https://stripe.com/docs/billing/prices-guide) (eg. "Mataroa Premium
+[Product](https://stripe.com/docs/billing/prices-guide) (eg. "BōcPress Premium
 Plan").
 
 To configure, add the following variables from your Stripe account to your
@@ -320,8 +315,10 @@ export STRIPE_PRICE_ID="price_XXX"
 
 ## License
 
-Copyright Mataroa Contributors
+Copyright Mataroa & BōcPress Contributors
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Affero General Public License as published by the Free
 Software Foundation, version 3.
+
+Forked from [Mataroa](https://github.com/mataroablog/mataroa)
