@@ -24,7 +24,13 @@ def is_disallowed(username):
     if username[0] == "_":
         # do not allow leading underscores
         return True
-    return username in denylist.DISALLOWED_USERNAMES
+    
+    if username == "docs" and settings.ALLOW_DOCS_USER:
+        return False
+
+    # check if subdomain is disallowed
+    if username in denylist.DISALLOWED_USERNAMES and not settings.ALLOW_DOCS_USER:
+        return username in denylist.DISALLOWED_USERNAMES
 
 
 def get_approx_number(number):
