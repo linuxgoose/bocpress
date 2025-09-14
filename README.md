@@ -5,19 +5,19 @@ Naked blogging platform.
 ## Community
 
 We have a mailing list at
-[~sirodoht/mataroa-community@lists.sr.ht](mailto:~sirodoht/mataroa-community@lists.sr.ht)
-for the mataroa community to introduce themselves, their blogs, and discuss
+[~linuxgoose/bocpress-community@lists.sr.ht](mailto:~linuxgoose/bocpress-community@lists.sr.ht)
+for the BōcPress community to introduce themselves, their blogs, and discuss
 anything that’s on their mind!
 
 Archives at
-[lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
+[lists.sr.ht/~linuxgoose/bocpress-community](https://lists.sr.ht/~linuxgoose/bocpress-community)
 
 ## Contributing
 
 Open a PR on [GitHub](https://github.com/linuxgoose/bocpress).
 
 Send an email patch to
-[~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).
+[~linuxgoose/public-inbox@lists.sr.ht](mailto:~linuxgoose/public-inbox@lists.sr.ht).
 See how to contribute using email patches here:
 [git-send-email.io](https://git-send-email.io/).
 
