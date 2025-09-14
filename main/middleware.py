@@ -39,8 +39,12 @@ def host_middleware(get_response):
             # * also validation will happen inside views
             request.subdomain = host_parts[0]
 
+            allow_docs_user = False
+            if request.subdomain == "docs" and settings.ALLOW_DOCS_USER:
+                allow_docs_user = True
+
             # check if subdomain is disallowed
-            if request.subdomain in denylist.DISALLOWED_USERNAMES:
+            if request.subdomain in denylist.DISALLOWED_USERNAMES and not allow_docs_user:
                 return redirect(f"{util.get_protocol()}//{settings.CANONICAL_HOST}")
             # check if subdomain exists as blog
             elif models.User.objects.filter(username=request.subdomain).exists():

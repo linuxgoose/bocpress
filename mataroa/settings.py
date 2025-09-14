@@ -31,6 +31,8 @@ DEBUG = os.getenv("DEBUG") == "1"
 
 LOCALDEV = os.getenv("LOCALDEV") == "1"
 
+ALLOW_DOCS_USER = os.getenv("ALLOW_DOCS_USER", "0") == "1"
+
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
