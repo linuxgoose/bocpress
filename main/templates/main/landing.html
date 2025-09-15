@@ -170,17 +170,16 @@
     </details>
 
     <details>
-        <summary>Why doesn't strikethrough markdown notation work?</summary>
+        <summary>Why doesn't strikethrough markdown notation work? (<b>update:</b> now available!)</summary>
         <div>
             <p>
-                The markdown library we use
-                (<a href="https://github.com/Python-Markdown/markdown">Python-Markdown</a>)
-                supports
-                <a href="http://daringfireball.net/projects/markdown/syntax">
-                    John Gruber’s markdown spec</a>,
-                which does not define strikethrough text. Discussions have been had on migrating to another
-                markdown library at some point in the future, though, this is not
-                yet planned.
+                We now use the <a href="https://markdown-it-py.readthedocs.io/">markdown-it-py</a> library
+                for parsing markdown. This parser supports a rich set of features beyond the original
+                John Gruber specification, including tables, footnotes, fenced code blocks, and more.
+                Strikethrough text is fully supported using the <code>~~text~~</code> syntax.
+                If something isn’t rendering as expected, please ensure your markdown follows the
+                <a href="https://markdown-it-py.readthedocs.io/en/latest/README.html#syntax-extensions">
+                markdown-it-py syntax extensions</a>.
             </p>
         </div>
     </details>
@@ -197,7 +196,7 @@
     </details>
 
     <details>
-        <summary>Would you add support for LaTeX-style math expressions?</summary>
+        <summary>Would you add support for LaTeX-style math expressions? (<b>update:</b> now available!)</summary>
         <div>
             <p>
                 This was recently introduced in V1.3.1. Please see the <a href="https://github.com/linuxgoose/bocpress/pull/20">pull request</a> for more information or give it a try yourself.
@@ -206,17 +205,18 @@
     </details>
 
     <details>
-        <summary>What about supporting Mermaid flowcharts?</summary>
+        <summary>What about supporting Mermaid flowcharts? (<b>update:</b> Graphviz now available!)</summary>
         <div>
             <p>
-                We would not add
-                <a href="https://github.com/mermaid-js/mermaid">mermaid-js</a>
-                as it is
-                <a href="https://github.com/mermaid-js/mermaid/blob/develop/dist/mermaid.min.js">
-                    2.7MB minified
-                </a>
-                JavaScript which is far too heavy for BōcPress' mission. However, we would be interested
-                in implementing something similar if it was rendered on the backend.
+                We do not include <a href="https://github.com/mermaid-js/mermaid">mermaid-js</a>,
+                as it requires a hefty <a href="https://github.com/mermaid-js/mermaid/blob/develop/dist/mermaid.min.js">2.7MB of JavaScript</a>,
+                which would weigh down BōcPress’ mission of speed and simplicity.
+            </p>
+            <p>
+                In its place, we offer support for <a href="https://graphviz.org/">Graphviz</a>,
+                allowing you to render diagrams elegantly and safely, entirely server-side, without
+                adding any extra JavaScript. You may read more about this approach in our
+                <a href="https://jjrobinson.bocpress.co.uk/blog/diagrams-markdown-and-the-quiet-joy-of-graphviz-now-available-on-bocpress/">blog post</a>.
             </p>
         </div>
     </details>

@@ -18,6 +18,39 @@ from l2m4m import LaTeX2MathMLExtension
 
 from main import denylist, models
 
+from markdown_it import MarkdownIt
+from mdit_py_plugins.footnote import footnote_plugin
+from mdit_py_plugins.tasklists import tasklists_plugin
+from graphviz import Source
+
+md = (
+    MarkdownIt("commonmark", {"html": True})
+    .enable("strikethrough")
+    .enable("table")
+    .use(footnote_plugin)
+    .use(tasklists_plugin)
+)
+
+# Define allowed CSS properties and SVG attributes
+ALLOWED_CSS_PROPERTIES = frozenset([
+    "azimuth", "background-color", "border-bottom-color", "border-collapse",
+    "border-color", "border-left-color", "border-right-color", "border-top-color",
+    "clear", "color", "cursor", "direction", "display", "elevation", "float",
+    "font", "font-family", "font-size", "font-style", "font-variant", "font-weight",
+    "height", "letter-spacing", "line-height", "overflow", "pause", "pause-after",
+    "pause-before", "pitch", "pitch-range", "richness", "speak", "speak-header",
+    "speak-numeral", "speak-punctuation", "speech-rate", "stress", "text-align",
+    "text-decoration", "text-indent", "text-transform", "visibility", "white-space",
+    "widows", "width", "word-spacing", "z-index"
+])
+SVG_TAGS = ["svg","g","path","line","polygon","polyline","circle","ellipse","rect","text","defs","title","desc"]
+SVG_ATTRS = ["width","height","viewBox","fill","stroke","stroke-width","d","x","y","cx","cy","r","points","transform","style","id","class"]
+
+# Allow MathML tags
+MATHML_TAGS = [
+    "math","mrow","mi","mo","mn","msup","msub","mfrac","msqrt","mstyle",
+    "mtable","mtr","mtd","mfenced","ms","mspace","menclose","mover","munder"
+]
 
 def is_disallowed(username):
     """Return true if username is not allowed to be registered."""
@@ -131,37 +164,69 @@ def syntax_highlight(text):
 
 
 def clean_html(dirty_html, strip_tags=False):
-    """Clean potentially evil HTML.
-
-    - strip_tags: true will strip everything, false will escape.
-    """
+    allowed_tags = list(bleach.sanitizer.ALLOWED_TAGS) + denylist.ALLOWED_HTML_ELEMENTS + SVG_TAGS + MATHML_TAGS
+    denylist_attrs_dict = {"*": denylist.ALLOWED_HTML_ATTRS}
+    allowed_attrs = {**bleach.sanitizer.ALLOWED_ATTRIBUTES, **{tag: SVG_ATTRS for tag in SVG_TAGS}, **denylist_attrs_dict }
+    
     if strip_tags:
         return bleach.clean(dirty_html, strip=True)
 
-    css_sanitizer = CSSSanitizer(allowed_css_properties=denylist.ALLOWED_CSS_STYLES)
-    return bleach.clean(
-        dirty_html,
-        tags=denylist.ALLOWED_HTML_ELEMENTS,
-        attributes=denylist.ALLOWED_HTML_ATTRS,
-        css_sanitizer=css_sanitizer,
-    )
+    css_sanitizer = CSSSanitizer(allowed_css_properties=ALLOWED_CSS_PROPERTIES)
+    return bleach.clean(dirty_html, tags=allowed_tags, attributes=allowed_attrs, css_sanitizer=css_sanitizer)
+
+default_fence = md.renderer.rules.get("fence")
 
 
-def md_to_html(markdown_string, strip_tags=False):
-    """Return HTML formatted string, given a markdown one."""
+def fence_override(tokens, idx, options, env):
+    token = tokens[idx]
+    code = token.content
+    lang = token.info.strip()
+
+    if lang == "dot":
+        try:
+            svg_bytes = Source(code, format="svg").pipe()
+            svg_str = svg_bytes.decode()
+            # Remove XML declaration
+            svg_str = svg_str.replace('<?xml version="1.0" encoding="UTF-8"?>', '').strip()
+            return svg_str
+        except Exception:
+            return f"<pre>{code}</pre>"
+
+    # fallback to default renderer
+    if default_fence:
+        return default_fence(tokens, idx, options, env)
+    return f"<pre><code>{code}</code></pre>"
+
+md.renderer.rules["fence"] = fence_override
+
+
+def replace_latex_with_mathml(md_text: str) -> str:
+    # Replace all inline ($...$) and display ($$...$$) LaTeX with MathML
+    def repl(match):
+        latex = match.group(0)
+        # Use l2m4m to convert LaTeX to MathML
+        mathml_html = markdown.markdown(latex, extensions=[LaTeX2MathMLExtension()])
+        return mathml_html
+
+    # Display math first
+    md_text = re.sub(r"\$\$.*?\$\$", repl, md_text, flags=re.S)
+    # Inline math
+    md_text = re.sub(r"\$.*?\$", repl, md_text, flags=re.S)
+    return md_text
+
+
+def md_to_html(markdown_string: str, strip_tags=False) -> str:
     if not markdown_string:
         return ""
-    dirty_html = markdown.markdown(
-        syntax_highlight(markdown_string),
-        extensions=[
-            "markdown.extensions.fenced_code",
-            "markdown.extensions.tables",
-            "markdown.extensions.footnotes",
-            "markdown.extensions.toc",
-            LaTeX2MathMLExtension(),
-        ],
-    )
-    return clean_html(dirty_html, strip_tags)
+    
+    # Convert LaTeX to MathML first
+    mathml_html = replace_latex_with_mathml(markdown_string)
+    
+    # Pass through Markdown-It for strikethrough, tables, footnotes, and Graphviz diagrams
+    intermediate_html = md.render(mathml_html)
+    
+    # Clean the HTML but preserve SVG and MathML
+    return clean_html(intermediate_html, strip_tags=strip_tags)
 
 
 def remove_control_chars(text):
