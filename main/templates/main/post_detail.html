@@ -8,6 +8,21 @@
 {% include 'partials/rsl_license_head.html' %}
 {% endblock head_rsl_license %}
 
+{% block head_extra %}
+<style>
+
+    /* Light theme */
+    @media (prefers-color-scheme: light) {
+    {{ light_css|safe }}
+    }
+
+    /* Dark theme */
+    @media (prefers-color-scheme: dark) {
+    {{ dark_css|safe }}
+    }
+</style>
+{% endblock head_extra %}
+
 {% block content %}
 <main>
     {% if blog_user.blog_title %}

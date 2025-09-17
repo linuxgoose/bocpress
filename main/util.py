@@ -15,6 +15,7 @@ from django.utils.text import slugify
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import ClassNotFound, get_lexer_by_name, get_lexer_for_filename
 from l2m4m import LaTeX2MathMLExtension
+from pygments import highlight
 
 from main import denylist, models
 
@@ -24,12 +25,14 @@ from mdit_py_plugins.tasklists import tasklists_plugin
 from graphviz import Source
 
 md = (
-    MarkdownIt("commonmark", {"html": True})
+    MarkdownIt("commonmark", {"html": True, "highlight": None})
     .enable("strikethrough")
     .enable("table")
     .use(footnote_plugin)
     .use(tasklists_plugin)
 )
+
+formatter = HtmlFormatter(nowrap=True)
 
 # Define allowed CSS properties and SVG attributes
 ALLOWED_CSS_PROPERTIES = frozenset([
@@ -162,6 +165,15 @@ def syntax_highlight(text):
 
     return processed_text
 
+def highlight_code(code: str, lang: str) -> str:
+    try:
+        lexer = get_lexer_by_name(lang, stripall=True)
+    except Exception:
+        # fallback for unknown languages
+        return f"<pre><code>{code}</code></pre>"
+    return f'<pre class="code-block {lang}"><code>' + \
+           highlight(code, lexer, formatter) + \
+           "</code></pre>"
 
 def clean_html(dirty_html, strip_tags=False):
     allowed_tags = list(bleach.sanitizer.ALLOWED_TAGS) + denylist.ALLOWED_HTML_ELEMENTS + SVG_TAGS + MATHML_TAGS
@@ -191,6 +203,9 @@ def fence_override(tokens, idx, options, env):
             return svg_str
         except Exception:
             return f"<pre>{code}</pre>"
+        
+    if lang:
+        return highlight_code(code, lang)
 
     # fallback to default renderer
     if default_fence:

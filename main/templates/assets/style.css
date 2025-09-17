@@ -268,8 +268,9 @@ td {
 }
 
 pre {
-    background: var(--airy-grey-color);
+    background: var(--airy-grey-color) !important;
     overflow-x: auto;
+    padding: 12px;
 }
 
 code {

@@ -41,6 +41,8 @@ from main import denylist, forms, models, util
 from main.sitemaps import PageSitemap, PostSitemap, StaticSitemap
 from main.views import billing
 
+from pygments.formatters import HtmlFormatter
+
 logger = logging.getLogger(__name__)
 
 
@@ -334,6 +336,8 @@ def post_detail_redir(request, slug):
 
 class PostDetail(DetailView):
     model = models.Post
+    light_css = HtmlFormatter(style="default").get_style_defs('.code-block')
+    dark_css = HtmlFormatter(style="monokai").get_style_defs('.code-block')
 
     def get_queryset(self):
         queryset = models.Post.objects.filter(owner__username=self.request.subdomain)
@@ -366,6 +370,10 @@ class PostDetail(DetailView):
 
         # Reading time calculation
         context["reading_time"] = util.reading_time(self.object.body)
+
+        # Pygments CSS for code highlighting
+        context["light_css"] = self.light_css
+        context["dark_css"] = self.dark_css
 
         # do not record analytic if post is authed user's
         if (
@@ -931,6 +939,8 @@ class PageCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class PageDetail(DetailView):
     model = models.Page
+    light_css = HtmlFormatter(style="default").get_style_defs('.code-block')
+    dark_css = HtmlFormatter(style="monokai").get_style_defs('.code-block')
 
     def get_queryset(self):
         queryset = models.Page.objects.filter(owner__username=self.request.subdomain)
@@ -954,6 +964,10 @@ class PageDetail(DetailView):
             license_url = self.request.build_absolute_uri(license_path)
 
         context["license_url"] = license_url
+
+        # Pygments CSS for code highlighting
+        context["light_css"] = self.light_css
+        context["dark_css"] = self.dark_css
 
         # do not record analytic if post is authed user's
         if (
