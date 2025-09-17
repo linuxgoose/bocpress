@@ -52,8 +52,8 @@ class User(AbstractUser):
         max_length=350,
         blank=True,
         null=True,
-        default="Subscribe via [RSS](/rss/) / [via Email](/newsletter/).",
-        help_text="Default: Subscribe via [RSS](/rss/) / [via Email](/newsletter/).",
+        default="Subscribe via [RSS](/rss/) / [Atom](/atom/) / [via Email](/newsletter/).",
+        help_text="Default: Subscribe via [RSS](/rss/) / [Atom](/atom/) / [via Email](/newsletter/).",
     )
     footer_note = models.TextField(
         blank=True,
