@@ -156,6 +156,11 @@ class User(AbstractUser):
         verbose_name="Webring next URL",
         help_text="URL for your webring's next website.",
     )
+    markdown_link_paste_on = models.BooleanField(
+        default=False,
+        help_text="Enable/disable automatic markdown link formatting on paste.",
+        verbose_name="Auto Markdown link formatting",
+    )
 
     # billing
     stripe_customer_id = models.CharField(max_length=100, blank=True, null=True)

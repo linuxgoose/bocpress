@@ -266,6 +266,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "comments_on",
         "notifications_on",
         "mail_export_on",
+        "markdown_link_paste_on",
         "redirect_domain",
         "post_backups_on",
         "show_posts_on_homepage",
