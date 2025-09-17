@@ -113,9 +113,6 @@ def index(request):
         else:
             return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
 
-    if request.user.is_authenticated:
-        return redirect("blog_index")
-
     return render(request, "main/landing.html")
 
 def post_list(request):
