@@ -295,18 +295,22 @@ class UserMarkdownLinkOnPaste(TestCase):
         self.user = models.User.objects.create(username="alice")
         self.client.force_login(self.user)
 
-    def test_markdown_link_turned_on(self):
+    def test_markdown_link_paste_enabled(self):
+        # Enable the feature
         self.user.markdown_link_paste_on = True
         self.user.save()
-        response = self.client.get(
-            reverse("post_create"),
-        )
-        self.assertContains(response, "formatOnPaste")
 
-    def test_markdown_link_turned_off(self):
-        self.user.markdown_link_turned_on = False
+        response = self.client.get(reverse("post_create"))
+
+        # The page should include our new JS function name
+        self.assertContains(response, "markdownAutoFormat")
+
+    def test_markdown_link_paste_disabled(self):
+        # Disable the feature
+        self.user.markdown_link_paste_on = False
         self.user.save()
-        response = self.client.get(
-            reverse("post_create"),
-        )
-        self.assertNotContains(response, "formatOnPaste")
+
+        response = self.client.get(reverse("post_create"))
+
+        # The page should NOT include the JS
+        self.assertNotContains(response, "markdownAutoFormat")

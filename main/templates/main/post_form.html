@@ -82,8 +82,8 @@
 <script>
     {% include "assets/drag-and-drop-upload.js" %}
     {% include "assets/make-draft-button.js" %}
-    {% if request.user.markdown_link_paste_on %}
-    {% include "assets/markdown-paste-link.js" %}
+    {% if request.user.markdown_auto_format_on %}
+    {% include "assets/markdown-autoformat.js" %}
     {% endif %}
     {% if request.user.post_backups_on %}
     {% include "assets/save-snapshot.js" %}
