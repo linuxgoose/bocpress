@@ -28,8 +28,8 @@ function saveLogEntry() {
             }
         } else {
             // this branch runs first
-            // uplading, show feedback
-            console.log("uplading...");
+            // uploading, show feedback
+            console.log("uploading...");
         }
     };
 
