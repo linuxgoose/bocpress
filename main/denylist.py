@@ -8,6 +8,7 @@ DISALLOWED_USERNAMES = [
     "administration",
     "administrator",
     "api",
+    "atom",
     "auth",
     "authentication",
     "billing",

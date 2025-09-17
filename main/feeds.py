@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from main import models
 from main.util import reading_time
-from django.utils.feedgenerator import Rss201rev2Feed
+from django.utils.feedgenerator import Rss201rev2Feed, Atom1Feed
 
 class RSLRSSFeed(Rss201rev2Feed):
     def root_attributes(self):
@@ -59,7 +59,6 @@ class RSLRSSFeed(Rss201rev2Feed):
 
             handler.endElement("rsl:license")
             handler.endElement("rsl:content")
-
 
 class RSSBlogFeed(Feed):
     feed_type = RSLRSSFeed
@@ -119,6 +118,21 @@ class RSSBlogFeed(Feed):
             rsl_content = parse_rsl_xml(rsl_xml, post_url=f'https:{item.get_proper_url()}')
             return {"rsl_content": rsl_content}
         return {}
+
+
+class AtomBlogFeed(RSSBlogFeed):
+    feed_type = Atom1Feed
+    subtitle = RSSBlogFeed.description
+
+    def __call__(self, request, *args, **kwargs):
+        if not hasattr(request, "subdomain"):
+            raise Http404()
+
+        user = models.User.objects.get(username=request.subdomain)
+
+        models.AnalyticPage.objects.create(user=user, path="atom")
+
+        return super().__call__(request, *args, **kwargs)
 
 # Helper to parse RSL XML
 

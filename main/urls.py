@@ -103,10 +103,13 @@ urlpatterns += [
 # blog extras
 urlpatterns += [
     path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
-    path("feed/", feeds.RSSBlogFeed(), name="rss_feed"),
+    path("atom/", feeds.AtomBlogFeed(), name="atom_feed"),
+    path("feed/", feeds.RSSBlogFeed()),
     path("feed/rss/", feeds.RSSBlogFeed()),
+    path("feed/atom/", feeds.AtomBlogFeed()),
     path("feed.xml", feeds.RSSBlogFeed()),
     path("rss.xml", feeds.RSSBlogFeed()),
+    path("atom.xml", feeds.AtomBlogFeed()),
     path("index.xml", feeds.RSSBlogFeed()),
 
     # really simple licensing
