@@ -50,7 +50,7 @@
             {% else %}
             <a href="//{{ request.user.username }}.{{ request.get_host }}">View blog</a>
             {% endif %}
-            | <a href="{% url 'dashboard' %}">Dashboard</a>
+            | <a href="{% url 'dashboard' %}">Workshop</a>
             | <a href="{% url 'post_create' %}">New post</a>
             {% if blog_user.custom_domain %}
             | <a href="//{{ blog_user.custom_domain }}{{ request.path }}">View at {{ blog_user.custom_domain }}</a>

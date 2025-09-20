@@ -10,7 +10,7 @@ admin.site.site_header = "BōcPress admin"
 urlpatterns = [
     path("", general.index, name="index"),
     path("blog/", general.blog_index, name="blog_index"),
-    path("dashboard/", general.dashboard, name="dashboard"),
+    path("workshop/", general.dashboard, name="dashboard"),
     path("about/methodology/", general.methodology, name="methodology"),
     path("about/transparency/", general.transparency, name="transparency"),
     path("about/comparisons/", general.comparisons, name="comparisons"),
@@ -79,7 +79,7 @@ urlpatterns += [
 
 # blog posts and post snapshots
 urlpatterns += [
-    path("posts-dashboard/", general.PostList.as_view(), name="post_list_dashboard"),
+    path("posts-workshop/", general.PostList.as_view(), name="post_list_dashboard"),
     path(
         "post-backups/create/", general.SnapshotCreate.as_view(), name="snapshot_create"
     ),
@@ -97,7 +97,7 @@ urlpatterns += [
     path("post/<slug:slug>/", general.post_detail_redir, name="post_detail_redir_b"),
     path("blog/<slug:slug>/edit/", general.PostUpdate.as_view(), name="post_update"),
     path("blog/<slug:slug>/delete/", general.PostDelete.as_view(), name="post_delete"),
-    path("dashboard/homepage/", general.HomepageUpdate.as_view(), name="homepage_update"),
+    path("workshop/homepage/", general.HomepageUpdate.as_view(), name="homepage_update"),
 ]
 
 # blog extras
@@ -115,7 +115,7 @@ urlpatterns += [
     # really simple licensing
     path("license/", general.rsl_license_redirect, name="rsl_license_redirect"),
     path("license.xml", general.rsl_license_detail.as_view(), name="rsl_license"),
-    path("dashboard/licensing/", general.RSLUpdate.as_view(), name="rsl_update"),
+    path("workshop/licensing/", general.RSLUpdate.as_view(), name="rsl_update"),
 
     path("sitemap.xml", general.sitemap, name="sitemap"),
     path("robots.txt", general.robotstxt.as_view(), name="robots_txt"),
