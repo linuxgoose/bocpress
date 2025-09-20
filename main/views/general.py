@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
 import stripe
+from django.db.models import Q
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -151,6 +152,66 @@ def post_list(request):
                         owner=request.blog_user, is_hidden=False
                     ).defer("body"),
                     "license_url": license_url
+                },
+            )
+        
+            # add Link header for license if applicable
+            obj, created = models.ReallySimpleLicensing.objects.get_or_create(user=request.blog_user)
+            if request.blog_user.reallysimplelicensing.license and request.blog_user.reallysimplelicensing.show_http:
+                response["Link"] = f'<{license_url}>; rel="license"; type="application/rsl+xml"'
+
+            return response
+        else:
+            return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
+    else:
+        if request.user.is_authenticated:
+            return redirect("post_list_dashboard")
+        
+        return render(request, "404.html")
+
+def post_list_filter(request, tag = None):
+    if hasattr(request, "subdomain"):
+        if models.User.objects.filter(username=request.subdomain).exists():
+            drafts = []
+            if request.user.is_authenticated and request.user == request.blog_user:
+                posts = models.Post.objects.filter(Q(tags__iexact=tag) | 
+                                                   Q(tags__startswith=f"{tag},") | 
+                                                   Q(tags__endswith=f",{tag}") | 
+                                                   Q(tags__contains=f",{tag},"),owner=request.blog_user).defer(
+                    "body",
+                )
+                drafts = models.Post.objects.filter(
+                    owner=request.blog_user,
+                    published_at__isnull=True,
+                    tags__icontains=tag,
+                ).defer("body")
+            else:
+                models.AnalyticPage.objects.create(user=request.blog_user, path="index")
+                posts = models.Post.objects.filter(
+                    Q(tags__iexact=tag) | 
+                    Q(tags__startswith=f"{tag},") | 
+                    Q(tags__endswith=f",{tag}") | 
+                    Q(tags__contains=f",{tag},"),
+                    owner=request.blog_user,
+                    published_at__isnull=False,
+                    published_at__lte=timezone.now().date(),
+                ).defer("body")
+
+            license_url = request.build_absolute_uri(reverse('rsl_license'))
+
+            response = render(
+                request,
+                "main/blog_posts.html",
+                {
+                    "subdomain": request.subdomain,
+                    "blog_user": request.blog_user,
+                    "posts": posts,
+                    "drafts": drafts,
+                    "pages": models.Page.objects.filter(
+                        owner=request.blog_user, is_hidden=False
+                    ).defer("body"),
+                    "license_url": license_url,
+                    "filter_tag": tag,
                 },
             )
         
@@ -423,7 +484,7 @@ class PostDetail(DetailView):
 
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Post
-    fields = ["title", "published_at", "body"]
+    fields = ["title", "published_at", "body", "tags"]
     success_message = "'%(title)s' was created"
 
     def form_valid(self, form):
@@ -443,7 +504,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Post
-    fields = ["title", "slug", "published_at", "body"]
+    fields = ["title", "slug", "published_at", "body", "tags"]
     success_message = "post updated"
 
     def get_queryset(self):

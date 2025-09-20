@@ -9,6 +9,11 @@
         <a href="{% url 'post_create' %}">Create a new post »</a>
     </p>
     {% if post_list %}
+    {% if filter_tag %}
+    <p>
+        Active tag filter: <strong>{{ filter_tag }}</strong> (<a href="{% url 'post_list' %}">clear filter</a>)
+    </p>
+    {% endif %}
     <p>
         List of posts:
     </p>
@@ -18,7 +23,18 @@
             <a href="{% url 'post_detail' post.slug %}">
                 {{ post.title }}
             </a>
+            {% if p.tag_list %}
             <small>
+                —
+                <b>Tags</b>:
+                {% for tag in p.tag_list %}
+                    <a href="{% url 'post_list_filter' tag %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </small>
+            {% endif %}
+            <small>
+                — 
+                <b>Published on</b>:
                 {% if post.is_published %}
                 <time datetime="{{ post.published_at|date:'Y-m-d' }}" itemprop="datePublished">
                     — {{ post.published_at|date:'F j, Y' }}

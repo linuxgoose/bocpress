@@ -107,6 +107,12 @@ class RSSBlogFeed(Feed):
     def item_pubdate(self, item):
         # set time to 00:00 because we don't store time for published_at field
         return datetime.combine(item.published_at, datetime.min.time())
+    
+    def item_categories(self, item):
+        """
+        Return a list of tags for this item, to render <category> elements.
+        """
+        return item.tag_list  # uses your Post.tag_list property
         
     def item_extra_kwargs(self, item):
         """

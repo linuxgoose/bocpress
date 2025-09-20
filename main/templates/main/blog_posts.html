@@ -43,6 +43,12 @@
 
     <h2 itemprop="name">{% if blog_user.posts_page_title %}{{ blog_user.posts_page_title }}{% else %}Posts{% endif %}</h2>
 
+    {% if filter_tag %}
+    <p>
+        Active tag filter: <strong>{{ filter_tag }}</strong> (<a href="{% url 'post_list' %}">clear filter</a>)
+    </p>
+    {% endif %}
+
     {% if request.user.is_authenticated and request.subdomain == request.user.username and drafts %}
     <div class="drafts">
         <strong>
@@ -63,8 +69,18 @@
         {% if p.published_at %}
         <li>
             <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
+            {% if p.tag_list %}
             <small>
                 —
+                <b>Tags</b>:
+                {% for tag in p.tag_list %}
+                    <a href="{% url 'post_list_filter' tag %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </small>
+            {% endif %}
+            <small>
+                —
+                <b>Published on</b>:
                 <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">
                     {{ p.published_at|date:'F j, Y' }}
                 </time>

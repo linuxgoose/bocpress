@@ -264,6 +264,7 @@ class Post(models.Model):
         help_text="Leave blank to keep as draft/unpublished. Use a future date for auto-posting.",
     )
     broadcasted_at = models.DateTimeField(blank=True, null=True, default=None)
+    tags = models.CharField(max_length=300, blank=True, null=True, default=None)
 
     class Meta:
         ordering = ["-published_at", "-created_at"]
@@ -277,6 +278,12 @@ class Post(models.Model):
     def body_as_text(self):
         as_html = util.md_to_html(self.body)
         return bleach.clean(as_html, strip=True, tags=[])
+    
+    @property
+    def tag_list(self):
+        if self.tags:
+            return [t.strip() for t in self.tags.split(",") if t.strip()]
+        return []
 
     @property
     def is_draft(self):

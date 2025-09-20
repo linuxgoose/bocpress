@@ -63,6 +63,15 @@
         <div class="posts-item-body" itemprop="articleBody">
             {{ post.body_as_html|safe }}
         </div>
+
+        {% if post.tag_list %}
+        <hr>
+        <p><b>Tags</b>:
+        {% for tag in post.tag_list %}
+            <a href="{% url 'post_list_filter' tag %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </p>
+        {% endif %}
     </article>
 </main>
 

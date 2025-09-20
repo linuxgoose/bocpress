@@ -73,3 +73,4 @@ class APIPost(forms.Form):
     slug = forms.SlugField(max_length=300, required=False)
     body = forms.CharField(widget=forms.Textarea, required=False)
     published_at = forms.DateField(required=False)
+    tags = forms.CharField(max_length=300, required=False)
