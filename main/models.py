@@ -264,7 +264,7 @@ class Post(models.Model):
         help_text="Leave blank to keep as draft/unpublished. Use a future date for auto-posting.",
     )
     broadcasted_at = models.DateTimeField(blank=True, null=True, default=None)
-    tags = models.CharField(max_length=300, blank=True, null=True, default=None)
+    tags = models.CharField(max_length=300, blank=True, null=True, default=None, help_text="Enter comma-separated tags (e.g., django, python, blog).")
 
     class Meta:
         ordering = ["-published_at", "-created_at"]
