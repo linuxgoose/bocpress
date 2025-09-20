@@ -135,6 +135,13 @@ class User(AbstractUser):
         default="User-agent: *\nDisallow:\nAllow: /",
     )
     export_unsubscribe_key = models.UUIDField(default=uuid.uuid4, unique=True)
+    number_of_posts_feed = models.IntegerField(
+        blank=False,
+        help_text="Number of posts to show in RSS/Atom feed. Default is 10.",
+        verbose_name="Number of Posts in Feed",
+        null=False,
+        default=10,
+    )
 
     # webring related
     webring_name = models.CharField(max_length=200, blank=True, null=True)
