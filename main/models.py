@@ -310,6 +310,12 @@ class Post(models.Model):
             return f"//{self.owner.custom_domain}{path}"
         else:
             return self.get_absolute_url()
+        
+    def save(self, *args, **kwargs):
+        if self.tags:
+            cleaned_tags = [t.strip() for t in self.tags.split(",") if t.strip()]
+            self.tags = ",".join(cleaned_tags)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

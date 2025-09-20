@@ -3,6 +3,7 @@ import uuid
 from collections import defaultdict
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
+import re
 
 import stripe
 from django.db.models import Q
@@ -174,10 +175,7 @@ def post_list_filter(request, tag = None):
         if models.User.objects.filter(username=request.subdomain).exists():
             drafts = []
             if request.user.is_authenticated and request.user == request.blog_user:
-                posts = models.Post.objects.filter(Q(tags__iexact=tag) | 
-                                                   Q(tags__startswith=f"{tag},") | 
-                                                   Q(tags__endswith=f",{tag}") | 
-                                                   Q(tags__contains=f",{tag},"),owner=request.blog_user).defer(
+                posts = models.Post.objects.filter(Q(tags__regex=rf"(^|,){re.escape(tag)}(,|$)"),owner=request.blog_user).defer(
                     "body",
                 )
                 drafts = models.Post.objects.filter(
@@ -188,10 +186,7 @@ def post_list_filter(request, tag = None):
             else:
                 models.AnalyticPage.objects.create(user=request.blog_user, path="index")
                 posts = models.Post.objects.filter(
-                    Q(tags__iexact=tag) | 
-                    Q(tags__startswith=f"{tag},") | 
-                    Q(tags__endswith=f",{tag}") | 
-                    Q(tags__contains=f",{tag},"),
+                    Q(tags__regex=rf"(^|,){re.escape(tag)}(,|$)"),
                     owner=request.blog_user,
                     published_at__isnull=False,
                     published_at__lte=timezone.now().date(),
