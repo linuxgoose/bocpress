@@ -223,6 +223,14 @@ class UserCreateStepTwo(CreateView):
         )
         login(self.request, user)
         messages.success(self.request, self.success_message)
+
+        # send notification email
+        mail.send_mail(
+            subject=f"New user signup: {self.object.username}",
+            message=f"Hi - New user signup on BōcPress: {self.object.username} ({self.object.email})",
+            from_email=settings.NOTIFICATIONS_FROM_EMAIL,
+            recipient_list=[settings.DEFAULT_FROM_EMAIL],
+        )
         return HttpResponseRedirect(self.get_success_url())
 
     def dispatch(self, request, *args, **kwargs):
