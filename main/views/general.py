@@ -866,18 +866,29 @@ class BlogImport(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         files = form.cleaned_data["file"]
+        tag_line_re = re.compile(r"^> Tags:\s*(.+)$", flags=re.MULTILINE | re.IGNORECASE)
+
         for f in files:
             try:
                 content = f.read().decode("utf-8")
             except (UnicodeDecodeError, ValueError):
                 form.add_error("file", "File is not valid UTF-8.")
                 return self.form_invalid(form)
+            
+            tags = None
+            match = tag_line_re.search(content)
+            if match:
+                tags = ", ".join([t.strip() for t in match.group(1).split(",")])
+                # remove the tags line from the content
+                content = tag_line_re.sub("", content).strip()
+            
             models.Post.objects.create(
                 title=f.name,
                 slug=util.create_post_slug(f.name, self.request.user),
                 body=content,
                 owner=self.request.user,
                 published_at=None,
+                tags=tags,
             )
         return HttpResponseRedirect(self.get_success_url())
 
