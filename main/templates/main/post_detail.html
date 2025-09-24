@@ -68,7 +68,7 @@
         <hr>
         <p><b>Tags</b>:
         {% for tag in post.tag_list %}
-            <a href="{% url 'post_list_filter' tag %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+            <a href="{% url 'post_list' %}?tags={{ tag }}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
         {% endfor %}
         </p>
         {% endif %}
