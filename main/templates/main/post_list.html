@@ -14,6 +14,7 @@
         Active tag filter: <strong>{{ filter_tag }}</strong> (<a href="{% url 'post_list' %}">clear filter</a>)
     </p>
     {% endif %}
+
     <p>
         List of posts:
     </p>
@@ -23,7 +24,7 @@
             <a href="{% url 'post_detail' post.slug %}">
                 {{ post.title }}
             </a>
-            {% if p.tag_list %}
+            {% if p.tag_list and request.user.show_tags_in_post_list %}
             <small>
                 —
                 <b>Tags</b>:
@@ -47,6 +48,15 @@
         </li>
         {% endfor %}
     </ul>
+    {% endif %}
+
+    {% if all_tags and request.user.show_tags_in_post_list %}
+    <hr>
+    <p><strong>All tags:</strong>
+        {% for tag in all_tags %}
+            <a href="{% url 'post_list_dashboard_filter' tag %}" class="tag{% if filter_tag == tag %} active{% endif %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>
     {% endif %}
 </main>
 {% endblock content %}

@@ -80,6 +80,7 @@ urlpatterns += [
 # blog posts and post snapshots
 urlpatterns += [
     path("posts-workshop/", general.PostList.as_view(), name="post_list_dashboard"),
+    path("posts-workshop/tag/<slug:tag>/", general.PostList.as_view(), name="post_list_dashboard_filter"),
     path(
         "post-backups/create/", general.SnapshotCreate.as_view(), name="snapshot_create"
     ),

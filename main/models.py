@@ -2,6 +2,8 @@ import base64
 import binascii
 import os
 import uuid
+import re
+from django.db.models import Q
 
 import bleach
 from django.conf import settings
@@ -16,6 +18,31 @@ from main import util, validators
 def _generate_key():
     """Return 32-char random string."""
     return binascii.b2a_hex(os.urandom(16)).decode("utf-8")
+
+# custom queryset and manager for Post model to handle tag operations
+
+class PostQuerySet(models.QuerySet):
+    def with_tag(self, tag):
+        return self.filter(
+            Q(tags__regex=rf'(^|,){re.escape(tag)}(,|$)')
+        )
+
+    def all_unique_tags(self):
+        tags = set()
+        for post in self.exclude(tags__isnull=True).exclude(tags=""):
+            for tag in post.tag_list:
+                tags.add(tag)
+        return sorted(tags)
+
+class PostManager(models.Manager):
+    def get_queryset(self):
+        return PostQuerySet(self.model, using=self._db)
+
+    def with_tag(self, tag):
+        return self.get_queryset().with_tag(tag)
+
+    def all_unique_tags(self):
+        return self.get_queryset().all_unique_tags()
 
 
 class User(AbstractUser):
@@ -116,6 +143,11 @@ class User(AbstractUser):
         default=False,
         help_text="Show/hide posts in the navigation bar.",
         verbose_name="Show Posts In Nav",
+    )
+    show_tags_in_post_list = models.BooleanField(
+        default=True,
+        help_text="Show/hide tags in the post list.",
+        verbose_name="Show Tags In Post List",
     )
     noindex_on = models.BooleanField(
         default=False,
@@ -269,6 +301,8 @@ class Post(models.Model):
     class Meta:
         ordering = ["-published_at", "-created_at"]
         unique_together = [["slug", "owner"]]
+
+    objects = PostManager()
 
     @property
     def body_as_html(self):

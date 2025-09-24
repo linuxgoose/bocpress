@@ -152,7 +152,8 @@ def post_list(request):
                     "pages": models.Page.objects.filter(
                         owner=request.blog_user, is_hidden=False
                     ).defer("body"),
-                    "license_url": license_url
+                    "license_url": license_url,
+                    "all_tags": models.Post.objects.all_unique_tags()
                 },
             )
         
@@ -207,6 +208,7 @@ def post_list_filter(request, tag = None):
                     ).defer("body"),
                     "license_url": license_url,
                     "filter_tag": tag,
+                    "all_tags": models.Post.objects.all_unique_tags()
                 },
             )
         
@@ -228,7 +230,22 @@ class PostList(LoginRequiredMixin, ListView):
     model = models.Post
 
     def get_queryset(self):
-        return models.Post.objects.filter(owner=self.request.user)
+        qs = models.Post.objects.filter(owner=self.request.user)
+
+        #tag = self.request.GET.get("tag")
+        tag = self.kwargs.get("tag")
+        if tag:
+            qs = qs.with_tag(tag)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter_tag"] = self.kwargs.get("tag")
+        context["all_tags"] = models.Post.objects.filter(
+            owner=self.request.user
+        ).all_unique_tags()
+        return context
 
 def domain_check(request):
     """
@@ -335,6 +352,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "post_backups_on",
         "show_posts_on_homepage",
         "show_posts_in_nav",
+        "show_tags_in_post_list",
         "noindex_on",
         "reading_time_on",
         "robots_txt",
