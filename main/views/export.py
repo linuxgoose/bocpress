@@ -50,6 +50,9 @@ def export_markdown(request):
             title = p.slug + ".md"
             body = f"# {p.title}\n\n"
             body += f"> Published on {pub_date.strftime('%b %-d, %Y')}\n\n"
+            if p.tags:
+                tags_line = ", ".join(p.tag_list)
+                body += f"> Tags: {tags_line}\n\n"
             body += f"{p.body}\n"
             export_posts.append((title, io.BytesIO(body.encode())))
 
