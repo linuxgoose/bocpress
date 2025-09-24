@@ -43,12 +43,6 @@
 
     <h2 itemprop="name">{% if blog_user.posts_page_title %}{{ blog_user.posts_page_title }}{% else %}Posts{% endif %}</h2>
 
-    {% if filter_tag %}
-    <p>
-        Active tag filter: <strong>{{ filter_tag }}</strong> (<a href="{% url 'post_list' %}">clear filter</a>)
-    </p>
-    {% endif %}
-
     {% if request.user.is_authenticated and request.subdomain == request.user.username and drafts %}
     <div class="drafts">
         <strong>
@@ -64,25 +58,34 @@
     </div>
     {% endif %}
 
+    {% if tag_cloud and request.user.show_tags_in_post_list %}
+    <div class="tag-cloud">
+        All tags:
+        {% for tag, url, is_active in tag_cloud %}
+            <a href="{{ url }}" class="tag {% if is_active %}active{% endif %}">{{ tag }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <ul class="posts">
-        {% for p in posts %}
-        {% if p.published_at %}
+        {% for item in posts_with_tag_urls %}
+        {% if item.post.published_at %}
         <li>
-            <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
-            {% if p.tag_list and request.user.show_tags_in_post_list %}
-            <small>
-                —
-                <b>Tags</b>:
-                {% for tag in p.tag_list %}
-                    <a href="{% url 'post_list_filter' tag %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </small>
+            <a href="{% url 'post_detail' item.post.slug %}">{{ item.post.title }}</a>
+            {% if item.post.tag_list and request.user.show_tags_in_post_list %}
+                <small>
+                    — <b>Tags</b>:
+                    {% for tag, url, is_active in item.tag_urls %}
+                        <a href="{{ url }}" class="tag {% if is_active %}active{% endif %}">{{ tag }}</a>
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </small>
             {% endif %}
             <small>
                 —
                 <b>Published on</b>:
                 <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">
-                    {{ p.published_at|date:'F j, Y' }}
+                    {{ item.post.published_at|date:'F j, Y' }}
                 </time>
                 {% if not p.is_published %}
                 — SCHEDULED
@@ -91,15 +94,6 @@
         </li>
         {% endif %}
         {% endfor %}
-
-        {% if all_tags and request.user.show_tags_in_post_list %}
-        <hr>
-        <p><strong>All tags:</strong>
-            {% for tag in all_tags %}
-                <a href="{% url 'post_list_filter' tag %}" class="tag{% if tag == tag %} active{% endif %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-        {% endif %}
     </ul>
 </main>
 

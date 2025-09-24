@@ -320,6 +320,11 @@ footer {
     text-decoration: dotted underline;
 }
 
+.active {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
 /* mods
  * they override specific classes with specific styles */
 .type-approve {

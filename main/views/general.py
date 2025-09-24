@@ -141,19 +141,58 @@ def post_list(request):
 
             license_url = request.build_absolute_uri(reverse('rsl_license'))
 
+            # active tags as list
+            active_tags = request.GET.get("tags", "")
+            active_tags = [t.strip() for t in active_tags.split(",") if t.strip()]
+
+            # all unique tags for the user
+            all_tags = models.Post.objects.filter(
+                owner=request.user
+            ).all_unique_tags()
+
+            # generate tag cloud with URLs
+            tag_cloud = []
+            for tag in all_tags:
+                if tag in active_tags:
+                    remaining_tags = [t for t in active_tags if t != tag]
+                    url = f"{reverse('post_list')}?tags={','.join(remaining_tags)}" if remaining_tags else reverse('post_list')
+                    is_active = True
+                else:
+                    new_tags = active_tags + [tag]
+                    url = f"{reverse('post_list')}?tags={','.join(new_tags)}"
+                    is_active = False
+                tag_cloud.append((tag, url, is_active))
+
+            # generate tag URLs for each post
+            posts_with_tag_urls = []
+            for post in posts:
+                tag_urls = []
+                for tag in post.tag_list:
+                    if tag in active_tags:
+                        remaining = [t for t in active_tags if t != tag]
+                        url = f"{reverse('post_list')}?tags={','.join(remaining)}" if remaining else reverse('post_list')
+                        tag_urls.append((tag, url, True))
+                    else:
+                        url = f"{reverse('post_list')}?tags={','.join(active_tags + [tag])}"
+                        tag_urls.append((tag, url, False))
+                posts_with_tag_urls.append({
+                    "post": post,
+                    "tag_urls": tag_urls
+                })
+
             response = render(
                 request,
                 "main/blog_posts.html",
                 {
                     "subdomain": request.subdomain,
                     "blog_user": request.blog_user,
-                    "posts": posts,
                     "drafts": drafts,
                     "pages": models.Page.objects.filter(
                         owner=request.blog_user, is_hidden=False
                     ).defer("body"),
                     "license_url": license_url,
-                    "all_tags": models.Post.objects.all_unique_tags()
+                    "posts_with_tag_urls": posts_with_tag_urls,
+                    "tag_cloud": tag_cloud,
                 },
             )
         
@@ -170,81 +209,66 @@ def post_list(request):
             return redirect("post_list_dashboard")
         
         return render(request, "404.html")
-
-def post_list_filter(request, tag = None):
-    if hasattr(request, "subdomain"):
-        if models.User.objects.filter(username=request.subdomain).exists():
-            drafts = []
-            if request.user.is_authenticated and request.user == request.blog_user:
-                posts = models.Post.objects.filter(Q(tags__regex=rf"(^|,){re.escape(tag)}(,|$)"),owner=request.blog_user).defer(
-                    "body",
-                )
-                drafts = models.Post.objects.filter(
-                    owner=request.blog_user,
-                    published_at__isnull=True,
-                    tags__icontains=tag,
-                ).defer("body")
-            else:
-                models.AnalyticPage.objects.create(user=request.blog_user, path="index")
-                posts = models.Post.objects.filter(
-                    Q(tags__regex=rf"(^|,){re.escape(tag)}(,|$)"),
-                    owner=request.blog_user,
-                    published_at__isnull=False,
-                    published_at__lte=timezone.now().date(),
-                ).defer("body")
-
-            license_url = request.build_absolute_uri(reverse('rsl_license'))
-
-            response = render(
-                request,
-                "main/blog_posts.html",
-                {
-                    "subdomain": request.subdomain,
-                    "blog_user": request.blog_user,
-                    "posts": posts,
-                    "drafts": drafts,
-                    "pages": models.Page.objects.filter(
-                        owner=request.blog_user, is_hidden=False
-                    ).defer("body"),
-                    "license_url": license_url,
-                    "filter_tag": tag,
-                    "all_tags": models.Post.objects.all_unique_tags()
-                },
-            )
-        
-            # add Link header for license if applicable
-            obj, created = models.ReallySimpleLicensing.objects.get_or_create(user=request.blog_user)
-            if request.blog_user.reallysimplelicensing.license and request.blog_user.reallysimplelicensing.show_http:
-                response["Link"] = f'<{license_url}>; rel="license"; type="application/rsl+xml"'
-
-            return response
-        else:
-            return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
-    else:
-        if request.user.is_authenticated:
-            return redirect("post_list_dashboard")
-        
-        return render(request, "404.html")
-    
+ 
 class PostList(LoginRequiredMixin, ListView):
     model = models.Post
 
     def get_queryset(self):
         qs = models.Post.objects.filter(owner=self.request.user)
 
-        #tag = self.request.GET.get("tag")
-        tag = self.kwargs.get("tag")
-        if tag:
-            qs = qs.with_tag(tag)
+        tags = self.request.GET.get("tags")
+        if tags:
+            tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+            for tag in tag_list:
+                qs = qs.with_tag(tag)
 
         return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["filter_tag"] = self.kwargs.get("tag")
-        context["all_tags"] = models.Post.objects.filter(
+
+        # active tags as list
+        active_tags = self.request.GET.get("tags", "")
+        active_tags = [t.strip() for t in active_tags.split(",") if t.strip()]
+
+        # all unique tags for the user
+        all_tags = models.Post.objects.filter(
             owner=self.request.user
         ).all_unique_tags()
+
+        # generate tag cloud with URLs
+        tag_cloud = []
+        for tag in all_tags:
+            if tag in active_tags:
+                remaining_tags = [t for t in active_tags if t != tag]
+                url = f"{reverse('post_list_dashboard')}?tags={','.join(remaining_tags)}" if remaining_tags else reverse('post_list_dashboard')
+                is_active = True
+            else:
+                new_tags = active_tags + [tag]
+                url = f"{reverse('post_list_dashboard')}?tags={','.join(new_tags)}"
+                is_active = False
+            tag_cloud.append((tag, url, is_active))
+
+        context["tag_cloud"] = tag_cloud
+
+        # generate tag URLs for each post
+        posts_with_tag_urls = []
+        for post in context['object_list']:
+            tag_urls = []
+            for tag in post.tag_list:
+                if tag in active_tags:
+                    remaining = [t for t in active_tags if t != tag]
+                    url = f"{reverse('post_list_dashboard')}?tags={','.join(remaining)}" if remaining else reverse('post_list_dashboard')
+                    tag_urls.append((tag, url, True))
+                else:
+                    url = f"{reverse('post_list_dashboard')}?tags={','.join(active_tags + [tag])}"
+                    tag_urls.append((tag, url, False))
+            posts_with_tag_urls.append({
+                "post": post,
+                "tag_urls": tag_urls
+            })
+
+        context["posts_with_tag_urls"] = posts_with_tag_urls
         return context
 
 def domain_check(request):
