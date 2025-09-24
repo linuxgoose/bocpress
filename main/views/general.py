@@ -139,6 +139,13 @@ def post_list(request):
                     published_at__lte=timezone.now().date(),
                 ).defer("body")
 
+            # filter by tags if given
+            tags = request.GET.get("tags")
+            if tags:
+                tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+                for tag in tag_list:
+                    posts = posts.with_tag(tag)
+
             license_url = request.build_absolute_uri(reverse('rsl_license'))
 
             # active tags as list
