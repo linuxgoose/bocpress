@@ -58,7 +58,7 @@
     </div>
     {% endif %}
 
-    {% if tag_cloud and request.user.show_tags_in_post_list %}
+    {% if tag_cloud and request.blog_user.show_tags_in_post_list %}
     <div class="tag-cloud">
         All tags:
         {% for tag, url, is_active in tag_cloud %}
@@ -72,7 +72,7 @@
         {% if item.post.published_at %}
         <li>
             <a href="{% url 'post_detail' item.post.slug %}">{{ item.post.title }}</a>
-            {% if item.post.tag_list and request.user.show_tags_in_post_list %}
+            {% if item.post.tag_list and request.blog_user.show_tags_in_post_list %}
                 <small>
                     — <b>Tags</b>:
                     {% for tag, url, is_active in item.tag_urls %}
