@@ -52,6 +52,15 @@
             {% for d in drafts %}
             <li>
                 <a href="{% url 'post_detail' d.slug %}">{{ d.title }}</a>
+                {% if d.tag_list and request.blog_user.show_tags_in_post_list %}
+                <small>
+                    — <b>Tags</b>:
+                    {% for tag in d.tag_list %}
+                        <a href="{% url 'post_list' %}?tags={{ tag }}" class="tag">{{ tag }}</a>
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </small>
+            {% endif %}
             </li>
             {% endfor %}
         </ul>
