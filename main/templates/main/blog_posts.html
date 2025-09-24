@@ -93,10 +93,10 @@
             <small>
                 —
                 <b>Published on</b>:
-                <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">
+                <time datetime="{{ item.post.published_at|date:'Y-m-d' }}" itemprop="datePublished">
                     {{ item.post.published_at|date:'F j, Y' }}
                 </time>
-                {% if not p.is_published %}
+                {% if not item.post.is_published %}
                 — SCHEDULED
                 {% endif %}
             </small>
