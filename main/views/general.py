@@ -147,7 +147,7 @@ def post_list(request):
 
             # all unique tags for the user
             all_tags = models.Post.objects.filter(
-                owner=request.user
+                owner=request.blog_user
             ).all_unique_tags()
 
             # generate tag cloud with URLs
