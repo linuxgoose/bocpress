@@ -387,6 +387,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "noindex_on",
         "reading_time_on",
         "robots_txt",
+        "number_of_posts_feed",
     ]
     template_name = "main/user_update.html"
     success_message = "settings updated"

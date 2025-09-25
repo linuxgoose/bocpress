@@ -75,6 +75,7 @@ class UserAdmin(DjUserAdmin):
                     "is_approved",
                     "api_key",
                     "robots_txt",
+                    "number_of_posts_feed",
                 ),
             },
         ),
