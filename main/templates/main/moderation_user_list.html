@@ -118,7 +118,7 @@ button {
                     <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
                         {{ post.title }}</a>
                     <small>
-                        <button onclick="translatePost(event)">translate</button>
+                        <button style="color: var(--link-color)" onclick="translatePost(event)">translate</button>
                     </small>
                 </li>
                 {% endfor %}
