@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.4](https://git.sr.ht/~linuxgoose/bocpress/tree/v1.3.4)
+* add homepage content settings page
+* add tags support for posts
+* add Really Simple Licensing support
+* add auto Markdown formatting support (ability to turn off/on)
+* add reading time support for posts (including show/hide)
+* add ability to upload more files (docx, xlsx, pptx, pdf, md, txt, rtf, and more) - called assets now
+
 ## [1.3.2](https://github.com/linuxgoose/mataroa/releases/tag/1.3.2)
 * add blog index content by @linuxgoose in https://github.com/linuxgoose/mataroa/pull/23
 * [add custom robots.txt blog setting](https://github.com/linuxgoose/mataroa/commit/47bd06b3a71d75ddf73a91958b2e3101c675633e) by @linuxgoose
