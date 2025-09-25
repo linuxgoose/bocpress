@@ -76,6 +76,7 @@ class UserAdmin(DjUserAdmin):
                     "api_key",
                     "robots_txt",
                     "number_of_posts_feed",
+                    "custom_css",
                 ),
             },
         ),

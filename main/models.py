@@ -14,6 +14,62 @@ from django.utils import timezone
 
 from main import util, validators
 
+ALLOWED_CSS_PROPERTIES = {
+    # Layout / Box
+    "margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
+    "padding", "padding-top", "padding-right", "padding-bottom", "padding-left",
+    "width", "min-width", "max-width", "height", "min-height", "max-height",
+    "box-sizing", "display", "position", "top", "right", "bottom", "left", "z-index",
+    "overflow", "overflow-x", "overflow-y",
+
+    # Typography
+    "font-family", "font-size", "font-weight", "font-style", "line-height",
+    "letter-spacing", "word-spacing", "text-align", "text-decoration",
+    "text-transform", "white-space",
+
+    # Color / Background
+    "color", "background", "background-color", "background-size",
+    "background-repeat", "background-position", "opacity",
+
+    # Borders / Outline
+    "border", "border-top", "border-right", "border-bottom", "border-left",
+    "border-color", "border-width", "border-style", "border-radius",
+    "outline", "outline-color", "outline-style", "outline-width",
+
+    # Flex / Grid
+    "flex", "flex-direction", "flex-wrap", "flex-basis", "flex-grow", "flex-shrink",
+    "justify-content", "align-items", "align-self", "align-content",
+    "gap", "row-gap", "column-gap",
+    "grid-template-columns", "grid-template-rows", "grid-gap",
+    "grid-column", "grid-row",
+
+    # Visual effects
+    "box-shadow", "cursor", "transition",
+    "transform", "overflow-wrap"
+}
+
+def sanitize_css(css_string: str) -> str:
+    """
+    Keep only allowed CSS properties, remove unsafe content.
+    """
+    safe_rules = []
+    for rule in css_string.split('}'):
+        if '{' not in rule:
+            continue
+        selector, props = rule.split('{', 1)
+        safe_props = []
+        for prop in props.split(';'):
+            if ':' not in prop:
+                continue
+            name, value = prop.split(':', 1)
+            name = name.strip().lower()
+            value = value.strip()
+            if name in ALLOWED_CSS_PROPERTIES and 'expression' not in value.lower() and 'javascript:' not in value.lower():
+                safe_props.append(f"{name}: {value}")
+        if safe_props:
+            safe_rules.append(f"{selector.strip()} {{ {'; '.join(safe_props)} }}")
+    return ' '.join(safe_rules)
+
 
 def _generate_key():
     """Return 32-char random string."""
@@ -174,6 +230,13 @@ class User(AbstractUser):
         null=False,
         default=10,
     )
+    custom_css = models.TextField(
+        blank=True,
+        help_text="Custom CSS for your blog to override certain parts, or all of, the default theme. Leave blank for no overrides. Click <a href='https://docs.bocpress.co.uk/custom-css/' target='_blank' rel='noopener noreferrer'>here</a> to learn about the allowed CSS properties.",
+        verbose_name="Custom CSS",
+        null=True,
+        default="",
+    )
 
     # webring related
     webring_name = models.CharField(max_length=200, blank=True, null=True)
@@ -277,6 +340,11 @@ class User(AbstractUser):
     def reset_api_key(self):
         self.api_key = _generate_key()
         self.save()
+
+    def save(self, *args, **kwargs):
+        if self.custom_css:
+            self.custom_css = sanitize_css(self.custom_css)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.username

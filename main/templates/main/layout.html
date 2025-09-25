@@ -28,6 +28,12 @@
             {% include 'assets/style.css' %}
         </style>
 
+        {% block extra_css %}
+        <style>
+        {{ request.blog_user.custom_css|safe }}
+        </style>
+        {% endblock %}
+
         {% block head_rsl_license %}
         {% endblock head_rsl_license %}
     </head>

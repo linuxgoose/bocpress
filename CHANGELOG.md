@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.5](https://git.sr.ht/~linuxgoose/bocpress/tree/v1.3.5)
+* add custom CSS functionality
+* add number of posts in feed setting
+
 ## [1.3.4](https://git.sr.ht/~linuxgoose/bocpress/tree/v1.3.4)
 * add homepage content settings page
 * add tags support for posts
