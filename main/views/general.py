@@ -381,7 +381,6 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "markdown_auto_format_on",
         "redirect_domain",
         "post_backups_on",
-        "show_posts_on_homepage",
         "show_posts_in_nav",
         "show_tags_in_post_list",
         "noindex_on",
