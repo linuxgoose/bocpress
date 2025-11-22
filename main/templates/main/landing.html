@@ -59,7 +59,7 @@
             <li>Import text/markdown files</li>
             <li>Export content as an ePub book</li>
         </ul>
-        <li>100% Affero GPL <a href="https://sr.ht/~linuxgoose/bocpress/">free software</a></li>
+        <li>100% Affero GPL <a href="https://github.com/linuxgoose/bocpress/">free software</a></li>
         <li><a href="{% url 'transparency' %}">Business Transparency and Oppenness</a></li>
     </ul>
 
@@ -102,11 +102,19 @@
     <h2>FAQ</h2>
 
     <details>
-        <summary>Do you support custom CSS?</summary>
+        <summary>Do you support custom CSS? (<b>update:</b> now available!)</summary>
         <div>
             <p>
-                Not at the moment. The philosophy of BōcPress is to be as minimal as possible without enabling
-                too many decisions about styling. We understand that this is not what some prefer and are open to ideas.
+                Yes! You can now add custom CSS to your blog via the "Custom CSS" section in your blog settings. 
+            </p>
+            <p>
+                The philosophy of BōcPress is to be as minimal as possible without enabling
+                too many decisions about styling. Therefore, there are only a limited amount of custom CSS properties. That can be overriden.
+                This allows users to maintain the speed and simplicity of BōcPress while still having some control over the appearance of their blog.
+                We understand that this is not what some prefer and are open to ideas.
+            </p>
+            <p>
+                A full list of available CSS classes and IDs can be found in the <a href="https://docs.bocpress.co.uk/custom-css/">Custom CSS Guide</a>.
             </p>
         </div>
     </details>
@@ -116,7 +124,7 @@
         <div>
             <p>
                 Absolutely. The project is
-                <a href="https://sr.ht/~linuxgoose/bocpress/">open source</a>. Feel free to send an [email](mailto:hello@bocpress.co.uk) should you have any questions.
+                <a href="https://github.com/linuxgoose/bocpress/">open source</a>. Feel free to send an <a href="mailto:hello@bocpress.co.uk">email</a> should you have any questions.
             </p>
         </div>
     </details>
@@ -148,12 +156,18 @@
     </details>
 
     <details>
-        <summary>What about tags or categories?</summary>
+        <summary>What about tags or categories? (<b>update:</b> now available!)</summary>
         <div>
             <p>
-                These are not currently supported, however there are plans to add them. We want to keep the platform simple, 
-                but understand that tags or categories can help with organization and discovery. If implemented, 
-                they will be designed to remain minimal and unobtrusive.
+                Now available! You can add tags to your posts to help organize and categorize your content.
+            </p>
+            <p>
+                Tags can be added when creating or editing a post. Simply enter your desired tags in the "Tags" field,
+                separated by commas. Once added, tags will be displayed on the post page and can be clicked to view
+                all posts associated with that tag.
+            </p>
+            <p>
+                Added in version 1.3.4. Read more <a href="https://docs.bocpress.co.uk/blog/version-134-whats-new/">here</a>.
             </p>
         </div>
     </details>
