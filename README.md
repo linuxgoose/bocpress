@@ -5,19 +5,16 @@ From Quill to Cloud. A blogging platform where words endure and stories take fli
 ## Community
 
 We have a mailing list at
-[~linuxgoose/bocpress-community@lists.sr.ht](mailto:~linuxgoose/bocpress-community@lists.sr.ht)
-for the BōcPress community to introduce themselves, their blogs, and discuss
-anything that’s on their mind!
+[docs.bocpress.co.uk/newsletter/](https://docs.bocpress.co.uk/newsletter/) to keep up-to-date on the latest BōcPress developments.
 
-Archives at
-[lists.sr.ht/~linuxgoose/bocpress-community](https://lists.sr.ht/~linuxgoose/bocpress-community)
+Feel free to reach out to the development team to say hi or share your blog by [email](mailto:hello@bocpress.co.uk).
 
 ## Contributing
 
 Open a PR on [GitHub](https://github.com/linuxgoose/bocpress).
 
 Send an email patch to
-[~linuxgoose/public-inbox@lists.sr.ht](mailto:~linuxgoose/public-inbox@lists.sr.ht).
+[development@bocpress.co.uk](mailto:development@bocpress.co.uk).
 See how to contribute using email patches here:
 [git-send-email.io](https://git-send-email.io/).
 
