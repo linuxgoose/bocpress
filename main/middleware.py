@@ -30,7 +30,7 @@ def host_middleware(get_response):
         canonical_parts = settings.CANONICAL_HOST.split(".")
 
         if host == settings.CANONICAL_HOST:
-            # this case is for mataroa.blog landing and dashboard pages
+            # this case is for bocpress.co.uk landing and dashboard pages
             # * don't set request.subdomain
             # * set theme if logged in
             # * return immediately
@@ -39,15 +39,20 @@ def host_middleware(get_response):
                 request.theme_sansserif = request.user.theme_sansserif
             return get_response(request)
         elif (
-            len(host_parts) == 3
-            and host_parts[1] == canonical_parts[0]  # should be "mataroa"
-            and host_parts[2] == canonical_parts[1]  # should be "blog"
+            len(host_parts) == 4
+            and host_parts[1] == canonical_parts[0]  # should be "bocpress"
+            and host_parts[2] == canonical_parts[1]  # should be "co"
+            and host_parts[3] == canonical_parts[2]  # should be "uk"
         ):
-            # this case is for <subdomain>.mataroa.blog:
+            # this case is for <subdomain>.bocpress.co.uk:
             # * set subdomain to given subdomain
             # * the lists indexes are different because CANONICAL_HOST has no subdomain
             # * also validation will happen inside views
             request.subdomain = host_parts[0]
+
+            allow_docs_user = False
+            if request.subdomain == "docs" and settings.ALLOW_DOCS_USER:
+                allow_docs_user = True
 
             # check if subdomain is disallowed
             if request.subdomain in denylist.DISALLOWED_USERNAMES:
@@ -73,7 +78,7 @@ def host_middleware(get_response):
                             request.blog_user.custom_domain + request.path_info
                         )
 
-                    # user has retired their mataroa blog, redirect to new domain
+                    # user has retired their bocpress blog, redirect to new domain
                     if request.blog_user.redirect_domain:
                         redir_domain = (
                             request.blog_user.redirect_domain + request.path_info[5:]
@@ -95,7 +100,7 @@ def host_middleware(get_response):
             request.theme_zialucia = request.blog_user.theme_zialucia
             request.theme_sansserif = request.blog_user.theme_sansserif
 
-            # if user has retired their mataroa blog (and keeps the custom domain)
+            # if user has retired their bocpress blog (and keeps the custom domain)
             # redirect to new domain
             if request.blog_user.redirect_domain:
                 redir_domain = request.blog_user.redirect_domain + request.path_info[5:]
