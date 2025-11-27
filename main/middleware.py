@@ -55,7 +55,7 @@ def host_middleware(get_response):
                 allow_docs_user = True
 
             # check if subdomain is disallowed
-            if request.subdomain in denylist.DISALLOWED_USERNAMES:
+            if request.subdomain in denylist.DISALLOWED_USERNAMES and not allow_docs_user:
                 return redirect(f"{scheme.get_protocol()}//{settings.CANONICAL_HOST}")
             # check if subdomain exists as blog
             elif models.User.objects.filter(username=request.subdomain).exists():
