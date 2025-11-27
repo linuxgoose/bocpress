@@ -169,12 +169,17 @@ urlpatterns += [
 
 # billing
 urlpatterns += [
-    path("billing/", billing.billing_index, name="billing_index"),
+    path("billing/overview/", billing.billing_overview, name="billing_overview"),
     path("billing/card/", billing.BillingCard.as_view(), name="billing_card"),
     path(
         "billing/subscribe/",
         billing.BillingSubscribe.as_view(),
         name="billing_subscribe",
+    ),
+    path(
+        "billing/resubscribe/",
+        billing.BillingResubscribe.as_view(),
+        name="billing_resubscribe",
     ),
     path(
         "billing/card/<slug:stripe_payment_method_id>/delete/",
@@ -185,11 +190,6 @@ urlpatterns += [
         "billing/card/<slug:stripe_payment_method_id>/default/",
         billing.billing_card_default,
         name="billing_card_default",
-    ),
-    path(
-        "billing/subscription/",
-        billing.billing_subscription,
-        name="billing_subscription",
     ),
     path(
         "billing/subscription/welcome/",
@@ -207,7 +207,12 @@ urlpatterns += [
         name="billing_subscription_cancel",
     ),
     path(
-        "billing/stripe/webhook/",
+        "billing/subscription/resume/",
+        billing.BillingResume.as_view(),
+        name="billing_subscription_resume",
+    ),
+    path(
+        "webhook/stripe/",
         billing.billing_stripe_webhook,
         name="billing_stripe_webhook",
     ),

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import redirect
 
-from main import denylist, models, util
+from main import denylist, models, scheme
 
 
 def host_middleware(get_response):
@@ -13,6 +13,17 @@ def host_middleware(get_response):
 
         # no http Host header in testing
         if not host:
+            return get_response(request)
+        
+        # allow localhost for webhooks in local development
+        if host.startswith("localhost:") or host.startswith("127.0.0.1:"):
+            return get_response(request)
+
+        # allow localhost for webhooks and Caddy on-demand TLS validation
+        if (host.startswith("localhost:") or host.startswith("127.0.0.1:")) and (
+            request.path.startswith("/webhook/")
+            or request.path.startswith("/accounts/domain/")
+        ):
             return get_response(request)
 
         host_parts = host.split(".")
@@ -28,24 +39,19 @@ def host_middleware(get_response):
                 request.theme_sansserif = request.user.theme_sansserif
             return get_response(request)
         elif (
-            len(host_parts) == 4
-            and host_parts[1] == canonical_parts[0]  # should be "bocpress"
-            and host_parts[2] == canonical_parts[1]  # should be "co"
-            and host_parts[3] == canonical_parts[2]  # should be "uk"
+            len(host_parts) == 3
+            and host_parts[1] == canonical_parts[0]  # should be "mataroa"
+            and host_parts[2] == canonical_parts[1]  # should be "blog"
         ):
-            # this case is for <subdomain>.bocpress.co.uk:
+            # this case is for <subdomain>.mataroa.blog:
             # * set subdomain to given subdomain
             # * the lists indexes are different because CANONICAL_HOST has no subdomain
             # * also validation will happen inside views
             request.subdomain = host_parts[0]
 
-            allow_docs_user = False
-            if request.subdomain == "docs" and settings.ALLOW_DOCS_USER:
-                allow_docs_user = True
-
             # check if subdomain is disallowed
-            if request.subdomain in denylist.DISALLOWED_USERNAMES and not allow_docs_user:
-                return redirect(f"{util.get_protocol()}//{settings.CANONICAL_HOST}")
+            if request.subdomain in denylist.DISALLOWED_USERNAMES:
+                return redirect(f"{scheme.get_protocol()}//{settings.CANONICAL_HOST}")
             # check if subdomain exists as blog
             elif models.User.objects.filter(username=request.subdomain).exists():
                 request.blog_user = models.User.objects.get(username=request.subdomain)
@@ -62,7 +68,6 @@ def host_middleware(get_response):
                     and request.user.username != request.subdomain
                 ):
                     redir_domain = ""
-                    print(request.blog_user.custom_domain)
                     if request.blog_user.custom_domain:  # user has set custom domain
                         redir_domain = (
                             request.blog_user.custom_domain + request.path_info
