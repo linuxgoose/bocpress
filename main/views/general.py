@@ -134,7 +134,7 @@ def post_list(request):
                     published_at__isnull=True,
                 ).defer("body")
             else:
-                models.AnalyticPage.objects.create(user=request.blog_user, path="index")
+                models.AnalyticPage.objects.create(user=request.blog_user, path="post_list")
                 posts = models.Post.objects.filter(
                     owner=request.blog_user,
                     published_at__isnull=False,
