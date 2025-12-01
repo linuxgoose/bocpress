@@ -42,6 +42,7 @@ from django.views.generic import (
 from main import denylist, forms, models, util
 from main.sitemaps import PageSitemap, PostSitemap, StaticSitemap
 from main.views import billing
+from main.util import is_bot
 
 from pygments.formatters import HtmlFormatter
 
@@ -84,7 +85,8 @@ def index(request):
                     published_at__isnull=True,
                 ).defer("body")
             else:
-                models.AnalyticPage.objects.create(user=request.blog_user, path="index")
+                if not is_bot(request):
+                    models.AnalyticPage.objects.create(user=request.blog_user, path="index")
                 posts = models.Post.objects.filter(
                     owner=request.blog_user,
                     published_at__isnull=False,
@@ -518,7 +520,8 @@ class PostDetail(DetailView):
             and self.request.user == self.object.owner
         ):
             return context
-        models.AnalyticPost.objects.create(post=self.object)
+        if not is_bot(self.request):
+            models.AnalyticPost.objects.create(post=self.object)
 
         return context
     

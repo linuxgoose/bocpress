@@ -5,6 +5,7 @@ import zipfile
 import math
 import re
 from django.utils.html import strip_tags
+from django.http import HttpRequest
 
 import bleach
 import markdown
@@ -54,6 +55,15 @@ MATHML_TAGS = [
     "math","mrow","mi","mo","mn","msup","msub","mfrac","msqrt","mstyle",
     "mtable","mtr","mtd","mfenced","ms","mspace","menclose","mover","munder"
 ]
+
+# Bot detection regex
+BOT_REGEX = re.compile(
+    r"bot|crawl|spider|slurp|mediapartners", re.I
+)
+
+def is_bot(request: HttpRequest) -> bool:
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
+    return bool(BOT_REGEX.search(user_agent))
 
 def is_disallowed(username):
     """Return true if username is not allowed to be registered."""
