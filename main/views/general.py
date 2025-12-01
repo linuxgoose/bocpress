@@ -133,7 +133,7 @@ def post_list(request):
                     owner=request.blog_user,
                     published_at__isnull=True,
                 ).defer("body")
-            else:
+            elif not is_bot(request):
                 models.AnalyticPage.objects.create(user=request.blog_user, path="post_list")
                 posts = models.Post.objects.filter(
                     owner=request.blog_user,
